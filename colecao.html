@@ -17,6 +17,12 @@
 
 <a href="#main" class="skip-link">Pular para o conteúdo</a>
 
+<div class="promo-bar" id="promoBar">
+  <button type="button" class="promo-bar-arrow" id="promoPrev" aria-label="Promoção anterior">‹</button>
+  <div class="promo-track" id="promoTrack"></div>
+  <button type="button" class="promo-bar-arrow" id="promoNext" aria-label="Próxima promoção">›</button>
+</div>
+
 <div class="utility-bar">
   <div class="wrap utility-bar-in">
     <a href="#" data-wa-link target="_blank" rel="noopener">Fale no WhatsApp</a>
@@ -51,28 +57,54 @@
 </nav>
 <div class="nav-overlay" id="navOverlay"></div>
 
+<nav class="breadcrumb" aria-label="Breadcrumb"><div class="wrap"><a href="index.html">Início</a> / <span>Coleção</span></div></nav>
+
 <main id="main">
-  <section class="section wrap" style="padding-top:calc(64px + var(--space-section))">
+  <section class="section wrap" style="padding-top:var(--space-section)">
     <div class="sec-head">
       <div><span class="eyebrow">Catálogo completo</span><h1 class="heading-xl">Coleção</h1></div>
+      <button type="button" class="btn-secondary filters-trigger" id="filtersBtn" aria-haspopup="true" aria-controls="filtersDrawer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+        Filtros
+      </button>
     </div>
 
-    <div class="filters-bar" role="group" aria-label="Filtrar produtos">
-      <input type="search" id="searchInput" class="search-pill" placeholder="Buscar produto..." aria-label="Buscar produto">
-      <select id="sortSelect" class="filter-chip" aria-label="Ordenar por">
-        <option value="relevancia">Relevância</option>
-        <option value="menor-preco">Menor preço</option>
-        <option value="maior-preco">Maior preço</option>
-      </select>
-      <button type="button" class="filter-chip" id="promoChip" aria-pressed="false">Promoções</button>
+    <div class="scrim" id="filtersOverlay"></div>
+    <aside class="drawer filters-drawer" id="filtersDrawer" aria-label="Filtros">
+      <div class="drawer-head"><strong>Filtros</strong><button class="btn-icon-circular" id="closeFiltersDrawer" aria-label="Fechar filtros">×</button></div>
+      <div class="drawer-body filters-drawer-body">
+        <details open>
+          <summary>Ordenar e buscar</summary>
+          <div class="filters-bar" role="group" aria-label="Filtrar produtos">
+            <input type="search" id="searchInput" class="search-pill" placeholder="Buscar produto..." aria-label="Buscar produto">
+            <select id="sortSelect" class="filter-chip" aria-label="Ordenar por">
+              <option value="relevancia">Relevância</option>
+              <option value="menor-preco">Menor preço</option>
+              <option value="maior-preco">Maior preço</option>
+            </select>
+            <button type="button" class="filter-chip" id="promoChip" aria-pressed="false">Promoções</button>
+            <button type="button" class="filter-chip" id="favChip" aria-pressed="false">Favoritos</button>
+          </div>
+        </details>
+        <details open>
+          <summary>Categoria</summary>
+          <div class="filters-bar" role="group" aria-label="Filtrar por categoria">
+            <div class="filters" id="categoryChips"></div>
+          </div>
+        </details>
+        <details open>
+          <summary>Tamanho</summary>
+          <div class="filters-bar" role="group" aria-label="Filtrar por tamanho">
+            <div class="filters" id="sizeChips"></div>
+          </div>
+        </details>
+      </div>
+    </aside>
+
+    <div class="grid-wrap">
+      <div class="grid-spinner" id="gridSpinner" aria-hidden="true"><span class="spinner"></span></div>
+      <div class="grid" id="productsGrid"></div>
     </div>
-    <div class="filters-bar" role="group" aria-label="Filtrar por categoria">
-      <div class="filters" id="categoryChips"></div>
-    </div>
-    <div class="filters-bar" role="group" aria-label="Filtrar por tamanho">
-      <div class="filters" id="sizeChips"></div>
-    </div>
-    <div class="grid" id="productsGrid"></div>
   </section>
 </main>
 
@@ -95,7 +127,7 @@
         <h2 class="display-campaign">Bora vestir?</h2>
         <div style="margin-top:var(--space-xl)"><a href="#" data-wa-link target="_blank" rel="noopener" class="btn-primary">Chamar no WhatsApp</a></div>
       </div>
-      <div class="footer-col"><h5>Loja</h5><a href="colecao.html?promo=1">Promoções</a><a href="colecao.html?categoria=futebol">Futebol</a><a href="colecao.html?categoria=futsal">Futsal</a><a href="colecao.html?categoria=jiujitsu">Jiu-Jitsu</a><a href="index.html#personalizar">Personalizar</a></div>
+      <div class="footer-col"><h5>Loja</h5><a href="colecao.html?promo=1">Promoções</a><a href="colecao.html?favoritos=1">Favoritos</a><a href="colecao.html?categoria=futebol">Futebol</a><a href="colecao.html?categoria=futsal">Futsal</a><a href="colecao.html?categoria=jiujitsu">Jiu-Jitsu</a><a href="index.html#personalizar">Personalizar</a></div>
       <div class="footer-col"><h5>Ajuda</h5><a href="entrega.html">Entrega e pagamento</a><a href="contato.html">Contato</a><a href="colecao.html">Ver coleção</a></div>
       <div class="footer-col"><h5>Contato</h5><a href="#" data-wa-link target="_blank" rel="noopener">WhatsApp</a><a href="#" data-ig-link target="_blank" rel="noopener">Instagram</a><p data-store-cidade>Cidade</p></div>
     </div>
@@ -109,6 +141,6 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="js/store.js"></script>
+<script src="js/store.js" defer></script>
 </body>
 </html>

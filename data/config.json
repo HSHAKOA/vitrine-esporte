@@ -12,5 +12,10 @@
   "precoPersonalizacao": 149.90,
   "logo": "",
   "greeting": "Olá! Vim pelo site e quero fazer o seguinte pedido:",
-  "colecao": { "numero": "01", "nome": "Temporada 26" }
+  "colecao": { "numero": "01", "nome": "Temporada 26" },
+  "promocoes": [
+    "Frete combinado direto pelo WhatsApp",
+    "Pix, crédito ou débito — combine com a loja",
+    "Personalização em até 48h"
+  ]
 }

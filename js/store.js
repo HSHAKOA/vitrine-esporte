@@ -10,6 +10,7 @@ const Store = (() => {
   let CONFIG = null;
   let PRODUCTS = [];
   let cart = JSON.parse(localStorage.getItem("vitrine_cart") || "[]");
+  let favorites = JSON.parse(localStorage.getItem("vitrine_favoritos") || "[]");
 
   /* ---------------- utils ---------------- */
   function currency(v) {
@@ -27,6 +28,27 @@ const Store = (() => {
      carregar seu próprio "produto" embutido (personalização genérica) */
   function getLineProduct(item) {
     return item.custom ? item.produtoCustom : findProduct(item.sku);
+  }
+
+  /* ---------------- favoritos (wishlist local, sem backend) ---------------- */
+  function isFavorite(sku) { return favorites.includes(sku); }
+  function toggleFavorite(sku) {
+    const idx = favorites.indexOf(sku);
+    if (idx >= 0) favorites.splice(idx, 1); else favorites.push(sku);
+    localStorage.setItem("vitrine_favoritos", JSON.stringify(favorites));
+    document.dispatchEvent(new CustomEvent("favoritos:change"));
+  }
+  function heartSvg(active) {
+    return `<svg viewBox="0 0 24 24" fill="${active ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7.5-4.6-10-9.3C.5 8 2 4 6 4c2 0 3.5 1.2 4.5 2.6C11.5 5.2 13 4 15 4c4 0 5.5 4 4 7.7C19.5 16.4 12 21 12 21z"/></svg>`;
+  }
+  function favoriteBtnHtml(sku, extraClass = "") {
+    const active = isFavorite(sku);
+    return `<button type="button" class="btn-icon-circular product-card-fav${active ? " is-fav" : ""} ${extraClass}" data-fav="${sku}" aria-pressed="${active}" aria-label="${active ? "Remover dos favoritos" : "Adicionar aos favoritos"}">${heartSvg(active)}</button>`;
+  }
+
+  /* ---------------- parcelamento ---------------- */
+  function installmentsText(value) {
+    return `ou 12x de ${currency(value / 12)} sem juros`;
   }
 
   const CATEGORY_LABELS = {
@@ -162,6 +184,34 @@ const Store = (() => {
     setPageSeo({ title: titles[page] || CONFIG.nome, description: descs[page] || CONFIG.descricao });
   }
 
+  /* ---------------- promo bar (topo, cicla mensagens) ---------------- */
+  function initPromoBar() {
+    const bar = document.getElementById("promoBar");
+    const track = document.getElementById("promoTrack");
+    if (!bar || !track) return;
+    const msgs = (CONFIG.promocoes && CONFIG.promocoes.length) ? CONFIG.promocoes : [
+      "Frete combinado direto pelo WhatsApp",
+      "Pix, crédito ou débito — combine com a loja",
+      "Personalização em até 48h",
+    ];
+    let idx = 0;
+    track.innerHTML = msgs.map((m, i) => `<span class="promo-msg${i === 0 ? " active" : ""}">${escapeHtml(m)}</span>`).join("");
+    const spans = track.querySelectorAll(".promo-msg");
+    function show(i) { spans.forEach((s, si) => s.classList.toggle("active", si === i)); }
+    function next() { idx = (idx + 1) % msgs.length; show(idx); }
+    function prev() { idx = (idx - 1 + msgs.length) % msgs.length; show(idx); }
+    let timer;
+    function start() { if (msgs.length > 1) timer = setInterval(next, 5000); }
+    function stop() { clearInterval(timer); }
+    function restart() { stop(); start(); }
+    document.getElementById("promoPrev")?.addEventListener("click", () => { prev(); restart(); });
+    document.getElementById("promoNext")?.addEventListener("click", () => { next(); restart(); });
+    bar.addEventListener("mouseenter", stop);
+    bar.addEventListener("mouseleave", start);
+    bar.addEventListener("touchstart", stop, { passive: true });
+    start();
+  }
+
   /* ---------------- catálogo / render ---------------- */
   /* product-card do sistema Nike: mídia = bloco --color-soft-cloud vazio
      (sem foto, sem ícone), metadados abaixo com spacing.sm entre linhas. */
@@ -172,6 +222,7 @@ const Store = (() => {
       <article class="product-card" data-sku="${p.sku}">
         <a href="${href}" class="product-card-media" aria-label="${escapeHtml(p.nome)}">
           ${promo ? `<span class="badge-promo">Oferta</span>` : ""}
+          ${favoriteBtnHtml(p.sku)}
           <span class="product-card-quick">
             <button type="button" class="btn-icon-circular" data-sku="${p.sku}" aria-label="Adicionar ${escapeHtml(p.nome)} à sacola" title="Adicionar à sacola">+</button>
           </span>
@@ -182,6 +233,7 @@ const Store = (() => {
           <span class="product-card-price">
             ${promo ? `<span class="old">${currency(p.preco)}</span><span class="sale">${currency(precoFinal(p))}</span>` : currency(precoFinal(p))}
           </span>
+          <span class="product-card-installments">${installmentsText(precoFinal(p))}</span>
         </a>
       </article>`;
   }
@@ -194,12 +246,31 @@ const Store = (() => {
       return;
     }
     grid.innerHTML = list.map(p => productCardHtml(p)).join("");
-    grid.querySelectorAll("[data-sku]").forEach(btn => {
+    wireProductCardButtons(grid);
+  }
+
+  /* botões repetidos em qualquer grid de product-card (grade principal,
+     relacionados da PDP): adicionar à sacola (quick-add) e favoritar. */
+  function wireProductCardButtons(container) {
+    container.querySelectorAll("[data-sku]").forEach(btn => {
       btn.addEventListener("click", (e) => {
         e.preventDefault();
         e.stopPropagation();
         addToCart({ sku: btn.dataset.sku, qty: 1, tamanho: null, personalizacao: null });
         showToast("Adicionado à sacola ✓");
+      });
+    });
+    container.querySelectorAll("[data-fav]").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const sku = btn.dataset.fav;
+        toggleFavorite(sku);
+        const active = isFavorite(sku);
+        btn.classList.toggle("is-fav", active);
+        btn.setAttribute("aria-pressed", String(active));
+        btn.setAttribute("aria-label", active ? "Remover dos favoritos" : "Adicionar aos favoritos");
+        btn.innerHTML = heartSvg(active);
       });
     });
   }
@@ -243,6 +314,7 @@ const Store = (() => {
     const chipsEl = document.getElementById("categoryChips");
     const sizeChipsEl = document.getElementById("sizeChips");
     const promoBtn = document.getElementById("promoChip");
+    const favBtn = document.getElementById("favChip");
     const sortEl = document.getElementById("sortSelect");
     const searchEl = document.getElementById("searchInput");
     const categorias = [...new Set(PRODUCTS.map(p => p.categoria))];
@@ -251,6 +323,9 @@ const Store = (() => {
     let activeCategory = qs("categoria") || "todos";
     let activeTamanho = qs("tamanho") || "todos";
     let onlyPromo = qs("promo") === "1";
+    let onlyFavoritos = qs("favoritos") === "1";
+
+    initFiltersDrawer();
 
     function chipHtml(value, label, active) {
       return `<button type="button" class="filter-chip${active ? " filter-chip-active" : ""}" data-value="${value}" aria-pressed="${active}">${label}</button>`;
@@ -299,25 +374,61 @@ const Store = (() => {
       });
     }
 
-    function applyFilters() {
-      const term = (searchEl?.value || "").trim().toLowerCase();
-      let list = PRODUCTS.filter(p => {
-        const matchCat = activeCategory === "todos" || p.categoria === activeCategory;
-        const matchTerm = !term || p.nome.toLowerCase().includes(term);
-        const matchTamanho = activeTamanho === "todos"
-          || ((p.tamanhos || []).includes(activeTamanho) && !(p.tamanhosIndisponiveis || []).includes(activeTamanho));
-        const matchPromo = !onlyPromo || p.precoPromo != null;
-        return matchCat && matchTerm && matchTamanho && matchPromo;
+    if (favBtn) {
+      favBtn.classList.toggle("filter-chip-active", onlyFavoritos);
+      favBtn.setAttribute("aria-pressed", String(onlyFavoritos));
+      favBtn.addEventListener("click", () => {
+        onlyFavoritos = !onlyFavoritos;
+        favBtn.classList.toggle("filter-chip-active", onlyFavoritos);
+        favBtn.setAttribute("aria-pressed", String(onlyFavoritos));
+        applyFilters();
       });
-      const ordem = sortEl?.value || "relevancia";
-      if (ordem === "menor-preco") list = [...list].sort((a, b) => precoFinal(a) - precoFinal(b));
-      if (ordem === "maior-preco") list = [...list].sort((a, b) => precoFinal(b) - precoFinal(a));
-      renderGrid("productsGrid", list);
+    }
+    /* favoritar/desfavoritar um card na própria grade também deve
+       atualizar a lista quando o filtro "Favoritos" está ativo */
+    document.addEventListener("favoritos:change", () => { if (onlyFavoritos) applyFilters(); });
+
+    /* spinner sutil no grid a cada troca de filtro — não há fetch real,
+       então usa requestAnimationFrame para dar um respiro visual mínimo */
+    function applyFilters() {
+      showGridSpinner();
+      requestAnimationFrame(() => {
+        const term = (searchEl?.value || "").trim().toLowerCase();
+        let list = PRODUCTS.filter(p => {
+          const matchCat = activeCategory === "todos" || p.categoria === activeCategory;
+          const matchTerm = !term || p.nome.toLowerCase().includes(term);
+          const matchTamanho = activeTamanho === "todos"
+            || ((p.tamanhos || []).includes(activeTamanho) && !(p.tamanhosIndisponiveis || []).includes(activeTamanho));
+          const matchPromo = !onlyPromo || p.precoPromo != null;
+          const matchFavorito = !onlyFavoritos || isFavorite(p.sku);
+          return matchCat && matchTerm && matchTamanho && matchPromo && matchFavorito;
+        });
+        const ordem = sortEl?.value || "relevancia";
+        if (ordem === "menor-preco") list = [...list].sort((a, b) => precoFinal(a) - precoFinal(b));
+        if (ordem === "maior-preco") list = [...list].sort((a, b) => precoFinal(b) - precoFinal(a));
+        renderGrid("productsGrid", list);
+        setTimeout(hideGridSpinner, 180);
+      });
     }
 
     searchEl?.addEventListener("input", applyFilters);
     sortEl?.addEventListener("change", applyFilters);
     applyFilters();
+  }
+
+  function showGridSpinner() { document.getElementById("gridSpinner")?.classList.add("show"); }
+  function hideGridSpinner() { document.getElementById("gridSpinner")?.classList.remove("show"); }
+
+  /* drawer de filtros (mobile): mesmo padrão .drawer/.scrim da sacola */
+  function initFiltersDrawer() {
+    const drawer = document.getElementById("filtersDrawer");
+    const overlay = document.getElementById("filtersOverlay");
+    if (!drawer || !overlay) return;
+    function openDrawer() { drawer.classList.add("open"); overlay.classList.add("active"); }
+    function closeDrawer() { drawer.classList.remove("open"); overlay.classList.remove("active"); }
+    document.getElementById("filtersBtn")?.addEventListener("click", openDrawer);
+    document.getElementById("closeFiltersDrawer")?.addEventListener("click", closeDrawer);
+    overlay.addEventListener("click", closeDrawer);
   }
 
   function initHome() {
@@ -402,7 +513,8 @@ const Store = (() => {
     const buyBtn = document.getElementById("pdpBuyBtn");
     const sizeError = document.getElementById("pdpSizeError");
 
-    document.getElementById("pdpCat").textContent = CATEGORY_LABELS[p.categoria] || p.categoria;
+    const catLabel = CATEGORY_LABELS[p.categoria] || p.categoria;
+    document.getElementById("pdpCat").textContent = catLabel;
     document.getElementById("pdpTitle").textContent = p.nome;
     document.getElementById("pdpSku").textContent = `SKU: ${p.sku}`;
     document.getElementById("pdpDesc").textContent = p.descricao;
@@ -414,6 +526,43 @@ const Store = (() => {
       oldPriceEl.style.display = "none";
     }
     document.getElementById("pdpPrice").textContent = currency(precoFinal(p));
+    const installmentsEl = document.getElementById("pdpInstallments");
+    if (installmentsEl) installmentsEl.textContent = installmentsText(precoFinal(p));
+
+    /* breadcrumb: Início / Coleção / {nome do produto} */
+    const crumbCat = document.getElementById("pdpBreadcrumbCat");
+    if (crumbCat) crumbCat.href = `colecao.html?categoria=${encodeURIComponent(p.categoria)}`;
+    const crumbName = document.getElementById("pdpBreadcrumbName");
+    if (crumbName) crumbName.textContent = p.nome;
+
+    /* seção "entrega e pagamento" do accordion, com dados reais do config */
+    const entregaInfoEl = document.getElementById("pdpEntregaInfo");
+    if (entregaInfoEl && CONFIG) {
+      entregaInfoEl.textContent = `${CONFIG.prazoEntrega} Formas de pagamento: ${(CONFIG.pagamentos || []).join(", ")}.`;
+    }
+
+    /* favoritar */
+    const favBtn = document.getElementById("pdpFavBtn");
+    if (favBtn) {
+      const paintFav = () => {
+        const active = isFavorite(p.sku);
+        favBtn.classList.toggle("is-fav", active);
+        favBtn.setAttribute("aria-pressed", String(active));
+        favBtn.setAttribute("aria-label", active ? "Remover dos favoritos" : "Adicionar aos favoritos");
+        favBtn.innerHTML = heartSvg(active);
+      };
+      paintFav();
+      favBtn.addEventListener("click", () => { toggleFavorite(p.sku); paintFav(); });
+    }
+
+    /* compartilhar: só aparece se o navegador suportar a Web Share API */
+    const shareBtn = document.getElementById("pdpShareBtn");
+    if (shareBtn && navigator.share) {
+      shareBtn.style.display = "";
+      shareBtn.addEventListener("click", () => {
+        navigator.share({ title: p.nome, text: p.nome, url: location.href }).catch(() => {});
+      });
+    }
 
     function renderSizes() {
       if (!p.tamanhos || !p.tamanhos.length) { sizeGridEl.closest(".pdp-block").style.display = "none"; return; }
@@ -481,6 +630,39 @@ const Store = (() => {
     });
 
     document.getElementById("sizeGuideBtn")?.addEventListener("click", () => openModal("sizeGuideModal"));
+
+    /* barra fixa de compra: some enquanto o botão "Adicionar" principal
+       está visível, aparece quando o usuário rola além dele */
+    const stickyBar = document.getElementById("pdpStickyBar");
+    if (stickyBar) {
+      document.getElementById("pdpStickyName").textContent = p.nome;
+      document.getElementById("pdpStickyPrice").textContent = currency(precoFinal(p));
+      document.getElementById("pdpStickyAddBtn")?.addEventListener("click", () => {
+        const line = buildLine();
+        if (!line) return;
+        addToCart(line);
+        showToast("Adicionado à sacola ✓");
+      });
+      const stickyObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => stickyBar.classList.toggle("show", !entry.isIntersecting));
+      }, { threshold: 0 });
+      stickyObserver.observe(addBtn);
+    }
+
+    /* carrossel "você também pode gostar": mesmos product-card, mesma
+       categoria, sem o produto atual. Scroll nativo (overflow-x + snap). */
+    const relatedSection = document.getElementById("relatedSection");
+    const relatedRail = document.getElementById("relatedRail");
+    if (relatedSection && relatedRail) {
+      const related = PRODUCTS.filter(x => x.categoria === p.categoria && x.sku !== p.sku).slice(0, 8);
+      if (related.length) {
+        relatedSection.style.display = "";
+        relatedRail.innerHTML = related.map(productCardHtml).join("");
+        wireProductCardButtons(relatedRail);
+        document.getElementById("relatedPrev")?.addEventListener("click", () => relatedRail.scrollBy({ left: -240, behavior: "smooth" }));
+        document.getElementById("relatedNext")?.addEventListener("click", () => relatedRail.scrollBy({ left: 240, behavior: "smooth" }));
+      }
+    }
 
     renderCart();
   }
@@ -688,6 +870,7 @@ const Store = (() => {
     await loadData();
     setGenericPageSeo();
     renderNavCategoryMenu();
+    initPromoBar();
     initUiChrome();
     initHome();
     initHomeCustomizer();

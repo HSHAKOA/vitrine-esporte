@@ -284,7 +284,7 @@ select.filter-chip{cursor:pointer;height:40px;-webkit-appearance:none;appearance
 .contact-form{display:grid;gap:var(--space-lg);max-width:520px}
 
 /* ---------- PDP ---------- */
-.pdp{padding:calc(64px + var(--space-section)) 0 64px}
+.pdp{padding:var(--space-section) 0 64px}
 .pdp-grid{display:grid;gap:var(--space-section)}
 @media(min-width:900px){
   .pdp-grid{grid-template-columns:1fr 1fr;align-items:start}
@@ -398,6 +398,71 @@ select.filter-chip{cursor:pointer;height:40px;-webkit-appearance:none;appearance
   z-index:300;
 }
 .toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ---------- promo bar ---------- */
+.promo-bar{background:var(--color-ink);color:var(--color-on-primary);min-height:34px;display:flex;align-items:center;justify-content:center;gap:var(--space-md);padding:0 var(--gut)}
+.promo-bar-arrow{color:var(--color-on-primary);width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;font-size:16px;line-height:1;flex-shrink:0;transition:opacity var(--dur-fast) ease}
+.promo-bar-arrow:active{opacity:.5}
+.promo-track{flex:1;max-width:520px;text-align:center;overflow:hidden;position:relative;height:20px}
+.promo-msg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-body);font-size:var(--fs-caption-sm);font-weight:500;opacity:0;transition:opacity var(--dur) ease;white-space:nowrap}
+.promo-msg.active{opacity:1}
+
+/* ---------- breadcrumb ---------- */
+.breadcrumb{margin-top:64px;padding:var(--space-lg) 0}
+.breadcrumb a{color:var(--color-mute)}
+.breadcrumb a:hover{color:var(--color-ink);text-decoration:underline}
+.breadcrumb,.breadcrumb *{font-family:var(--font-body);font-size:var(--fs-caption-md);color:var(--color-mute)}
+
+/* ---------- filtros: drawer mobile (reaproveita .drawer/.scrim da sacola) ---------- */
+.filters-trigger{display:inline-flex}
+.filters-drawer-body details{box-shadow:inset 0 -1px 0 var(--color-hairline-soft)}
+.filters-drawer-body summary{padding:var(--space-lg) 0;font-family:var(--font-body);font-size:var(--fs-body-strong);font-weight:500;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center}
+.filters-drawer-body summary::-webkit-details-marker{display:none}
+.filters-drawer-body summary::after{content:"+";font-weight:400}
+.filters-drawer-body details[open] summary::after{content:"–"}
+.filters-drawer-body .filters-bar{margin-bottom:var(--space-lg);flex-wrap:wrap}
+@media(min-width:1025px){
+  .filters-trigger{display:none}
+  #filtersOverlay{display:none}
+  .filters-drawer{position:static;transform:none;width:auto;box-shadow:none;background:transparent;display:block;overflow:visible}
+  .filters-drawer .drawer-head{display:none}
+  .filters-drawer .drawer-body{padding:0;overflow:visible}
+  .filters-drawer-body summary{display:none}
+}
+
+/* ---------- grid: spinner de carregamento (filtros) ---------- */
+.grid-wrap{position:relative}
+.grid-spinner{position:absolute;inset:0;background:rgba(255,255,255,.6);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity var(--dur-fast) ease;z-index:5}
+.grid-spinner.show{opacity:1}
+.spinner{width:28px;height:28px;border:3px solid var(--color-hairline);border-top-color:var(--color-ink);border-radius:var(--radius-full);animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ---------- favoritos (coração) ---------- */
+.product-card-fav{position:absolute;top:var(--space-md);right:var(--space-md);z-index:2;width:36px;height:36px}
+.product-card-fav svg{width:18px;height:18px}
+
+/* ---------- parcelamento ---------- */
+.installments{color:var(--color-mute);font-size:var(--fs-caption-sm);margin-bottom:var(--space-lg)}
+.product-card-installments{color:var(--color-mute);font-size:var(--fs-caption-sm)}
+
+/* ---------- PDP: título/ações, accordion, carrossel relacionados, barra fixa ---------- */
+.pdp-title-row{display:flex;align-items:center;justify-content:space-between;gap:var(--space-md)}
+.pdp-actions-row{display:flex;gap:var(--space-sm)}
+.pdp-accordion{box-shadow:inset 0 -1px 0 var(--color-hairline-soft)}
+.pdp-accordion summary{padding:var(--space-lg) 0;font-family:var(--font-body);font-size:var(--fs-body-strong);font-weight:500;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center}
+.pdp-accordion summary::-webkit-details-marker{display:none}
+.pdp-accordion summary::after{content:"+";font-weight:400}
+.pdp-accordion[open] summary::after{content:"–"}
+.pdp-accordion .pdp-desc{padding-bottom:var(--space-lg);margin-bottom:0}
+.related-rail{display:flex;gap:var(--space-sm);overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:var(--space-sm)}
+.related-rail .product-card{flex:0 0 220px;scroll-snap-align:start}
+.related-arrows{display:flex;gap:var(--space-sm)}
+.pdp-sticky-bar{position:fixed;left:0;right:0;bottom:0;background:var(--color-canvas);box-shadow:inset 0 1px 0 var(--color-hairline);z-index:90;transform:translateY(100%);transition:transform var(--dur) ease;padding:var(--space-md) 0}
+.pdp-sticky-bar.show{transform:translateY(0)}
+.pdp-sticky-bar-in{display:flex;align-items:center;justify-content:space-between;gap:var(--space-md)}
+.pdp-sticky-info{display:flex;flex-direction:column;min-width:0;flex:1}
+.pdp-sticky-name{font-size:var(--fs-caption-md);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pdp-sticky-price{font-size:var(--fs-body-strong);font-weight:500;color:var(--color-mute)}
 
 /* ---------- reveal ---------- */
 .rv{opacity:0;transform:translateY(26px);transition:opacity .6s ease,transform .6s ease}

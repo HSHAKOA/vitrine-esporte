@@ -17,6 +17,12 @@
 
 <a href="#main" class="skip-link">Pular para o conteúdo</a>
 
+<div class="promo-bar" id="promoBar">
+  <button type="button" class="promo-bar-arrow" id="promoPrev" aria-label="Promoção anterior">‹</button>
+  <div class="promo-track" id="promoTrack"></div>
+  <button type="button" class="promo-bar-arrow" id="promoNext" aria-label="Próxima promoção">›</button>
+</div>
+
 <div class="utility-bar">
   <div class="wrap utility-bar-in">
     <a href="#" data-wa-link target="_blank" rel="noopener">Fale no WhatsApp</a>
@@ -51,6 +57,10 @@
 </nav>
 <div class="nav-overlay" id="navOverlay"></div>
 
+<nav class="breadcrumb" id="pdpBreadcrumb" aria-label="Breadcrumb">
+  <div class="wrap"><a href="index.html">Início</a> / <a href="colecao.html" id="pdpBreadcrumbCat">Coleção</a> / <span id="pdpBreadcrumbName"></span></div>
+</nav>
+
 <main id="main">
   <section class="pdp">
     <div class="wrap">
@@ -59,14 +69,33 @@
           <div class="pdp-main-image" aria-hidden="true"></div>
         </div>
         <div class="pdp-details">
-          <span class="pdp-cat caption-md" id="pdpCat"></span>
+          <div class="pdp-title-row">
+            <span class="pdp-cat caption-md" id="pdpCat"></span>
+            <div class="pdp-actions-row">
+              <button type="button" class="btn-icon-circular" id="pdpFavBtn" aria-label="Adicionar aos favoritos" aria-pressed="false"></button>
+              <button type="button" class="btn-icon-circular" id="pdpShareBtn" aria-label="Compartilhar produto" style="display:none">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
+              </button>
+            </div>
+          </div>
           <h1 class="pdp-title" id="pdpTitle"></h1>
           <span class="pdp-sku" id="pdpSku"></span>
           <div class="pdp-price-row">
             <span class="pdp-price-old" id="pdpPriceOld"></span>
             <span class="pdp-price" id="pdpPrice"></span>
           </div>
-          <p class="pdp-desc" id="pdpDesc"></p>
+          <p class="installments" id="pdpInstallments"></p>
+
+          <div class="pdp-block">
+            <details class="pdp-accordion" open>
+              <summary>Descrição</summary>
+              <p class="pdp-desc" id="pdpDesc"></p>
+            </details>
+            <details class="pdp-accordion">
+              <summary>Entrega e pagamento</summary>
+              <p class="pdp-desc" id="pdpEntregaInfo"></p>
+            </details>
+          </div>
 
           <div class="pdp-block">
             <div class="pdp-block-label">
@@ -96,7 +125,28 @@
       </div>
     </div>
   </section>
+
+  <section class="section wrap" id="relatedSection" style="display:none">
+    <div class="sec-head">
+      <div><span class="eyebrow">Você também pode gostar</span><h2 class="heading-xl">Mais da categoria</h2></div>
+      <div class="related-arrows">
+        <button type="button" class="btn-icon-circular" id="relatedPrev" aria-label="Anterior">‹</button>
+        <button type="button" class="btn-icon-circular" id="relatedNext" aria-label="Próximo">›</button>
+      </div>
+    </div>
+    <div class="related-rail" id="relatedRail"></div>
+  </section>
 </main>
+
+<div class="pdp-sticky-bar" id="pdpStickyBar" aria-hidden="true">
+  <div class="wrap pdp-sticky-bar-in">
+    <div class="pdp-sticky-info">
+      <span class="pdp-sticky-name" id="pdpStickyName"></span>
+      <span class="pdp-sticky-price" id="pdpStickyPrice"></span>
+    </div>
+    <button type="button" class="btn-primary btn-sm" id="pdpStickyAddBtn">Adicionar</button>
+  </div>
+</div>
 
 <!-- ============ MODAL: GUIA DE MEDIDAS ============ -->
 <div class="modal-overlay" id="sizeGuideModal">
@@ -137,7 +187,7 @@
         <h2 class="display-campaign">Bora vestir?</h2>
         <div style="margin-top:var(--space-xl)"><a href="#" data-wa-link target="_blank" rel="noopener" class="btn-primary">Chamar no WhatsApp</a></div>
       </div>
-      <div class="footer-col"><h5>Loja</h5><a href="colecao.html?promo=1">Promoções</a><a href="colecao.html?categoria=futebol">Futebol</a><a href="colecao.html?categoria=futsal">Futsal</a><a href="colecao.html?categoria=jiujitsu">Jiu-Jitsu</a><a href="index.html#personalizar">Personalizar</a></div>
+      <div class="footer-col"><h5>Loja</h5><a href="colecao.html?promo=1">Promoções</a><a href="colecao.html?favoritos=1">Favoritos</a><a href="colecao.html?categoria=futebol">Futebol</a><a href="colecao.html?categoria=futsal">Futsal</a><a href="colecao.html?categoria=jiujitsu">Jiu-Jitsu</a><a href="index.html#personalizar">Personalizar</a></div>
       <div class="footer-col"><h5>Ajuda</h5><a href="entrega.html">Entrega e pagamento</a><a href="contato.html">Contato</a><a href="colecao.html">Ver coleção</a></div>
       <div class="footer-col"><h5>Contato</h5><a href="#" data-wa-link target="_blank" rel="noopener">WhatsApp</a><a href="#" data-ig-link target="_blank" rel="noopener">Instagram</a><p data-store-cidade>Cidade</p></div>
     </div>
@@ -151,6 +201,6 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="js/store.js"></script>
+<script src="js/store.js" defer></script>
 </body>
 </html>
