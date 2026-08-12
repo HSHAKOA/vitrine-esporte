@@ -318,7 +318,10 @@ const Store = (() => {
     const sortEl = document.getElementById("sortSelect");
     const searchEl = document.getElementById("searchInput");
     const categorias = [...new Set(PRODUCTS.map(p => p.categoria))];
-    const tamanhos = sortSizes([...new Set(PRODUCTS.flatMap(p => p.tamanhos || []))]);
+    function sizesForCategory(cat) {
+      const pool = cat === "todos" ? PRODUCTS : PRODUCTS.filter(p => p.categoria === cat);
+      return sortSizes([...new Set(pool.flatMap(p => p.tamanhos || []))]);
+    }
 
     let activeCategory = qs("categoria") || "todos";
     let activeTamanho = qs("tamanho") || "todos";
@@ -342,12 +345,19 @@ const Store = (() => {
             b.classList.toggle("filter-chip-active", b === btn);
             b.setAttribute("aria-pressed", String(b === btn));
           });
+          renderSizeChips();
           applyFilters();
         });
       });
     }
 
-    if (sizeChipsEl) {
+    /* tamanhos disponíveis mudam de vocabulário por categoria (numeração de
+       calçado, faixa de kimono, peso de luva...) — mostrar só os da categoria
+       ativa evita uma parede de chips sem sentido junto */
+    function renderSizeChips() {
+      if (!sizeChipsEl) return;
+      const tamanhos = sizesForCategory(activeCategory);
+      if (!tamanhos.includes(activeTamanho)) activeTamanho = "todos";
       sizeChipsEl.innerHTML = [chipHtml("todos", "Todos", activeTamanho === "todos")]
         .concat(tamanhos.map(t => chipHtml(t, t, activeTamanho === t)))
         .join("");
@@ -362,6 +372,7 @@ const Store = (() => {
         });
       });
     }
+    renderSizeChips();
 
     if (promoBtn) {
       promoBtn.classList.toggle("filter-chip-active", onlyPromo);
