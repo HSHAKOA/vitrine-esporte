@@ -4,12 +4,23 @@
     "slug": "chuteira-campo-profissional",
     "nome": "Chuteira Campo Profissional",
     "categoria": "futebol",
-    "preco": 399.90,
-    "precoPromo": 349.90,
-    "tamanhos": ["37", "38", "39", "40", "41", "42", "43", "44"],
-    "tamanhosIndisponiveis": ["38"],
+    "preco": 399.9,
+    "precoPromo": 349.9,
+    "tamanhos": [
+      "37",
+      "38",
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "tamanhosIndisponiveis": [
+      "38"
+    ],
     "personalizavel": false,
-    "imagens": ["img/products/chuteira_campo_profissional_05.jpg"],
+    "imagens": [],
     "descricao": "Chuteira de campo profissional, cabedal sintético resistente e travas de borracha para tração em gramado natural. Ideal para quem joga com regularidade e exige durabilidade.",
     "destaque": true
   },
@@ -18,12 +29,17 @@
     "slug": "camisa-de-jogo-oficial",
     "nome": "Camisa de Jogo Oficial",
     "categoria": "futebol",
-    "preco": 219.90,
+    "preco": 219.9,
     "precoPromo": null,
-    "tamanhos": ["P", "M", "G", "GG"],
+    "tamanhos": [
+      "P",
+      "M",
+      "G",
+      "GG"
+    ],
     "tamanhosIndisponiveis": [],
     "personalizavel": true,
-    "imagens": ["img/products/camisa-jogo.webp"],
+    "imagens": [],
     "descricao": "Camisa de jogo em tecido dry-fit, leve e respirável. Personalize com nome e número para o seu time.",
     "destaque": false
   },
@@ -32,12 +48,14 @@
     "slug": "bola-de-futebol-campo-pro",
     "nome": "Bola de Futebol Campo Pro",
     "categoria": "futebol",
-    "preco": 179.90,
+    "preco": 179.9,
     "precoPromo": null,
-    "tamanhos": ["Único"],
+    "tamanhos": [
+      "Único"
+    ],
     "tamanhosIndisponiveis": [],
     "personalizavel": false,
-    "imagens": ["img/products/bola-campo.webp"],
+    "imagens": [],
     "descricao": "Bola oficial de campo, costura reforçada e miolo de alta resistência, aprovada para uso em jogos e treinos.",
     "destaque": true
   },
@@ -46,12 +64,16 @@
     "slug": "caneleira-profissional",
     "nome": "Caneleira Profissional",
     "categoria": "futebol",
-    "preco": 69.90,
+    "preco": 69.9,
     "precoPromo": null,
-    "tamanhos": ["P", "M", "G"],
+    "tamanhos": [
+      "P",
+      "M",
+      "G"
+    ],
     "tamanhosIndisponiveis": [],
     "personalizavel": false,
-    "imagens": ["img/products/caneleira_profissional_05.jpg"],
+    "imagens": [],
     "descricao": "Caneleira com proteção anatômica e fixação ajustável, leve e confortável para uso durante toda a partida.",
     "destaque": false
   },
@@ -60,12 +82,14 @@
     "slug": "meiao-futebol-profissional",
     "nome": "Meião Futebol Profissional",
     "categoria": "futebol",
-    "preco": 39.90,
+    "preco": 39.9,
     "precoPromo": null,
-    "tamanhos": ["Único"],
+    "tamanhos": [
+      "Único"
+    ],
     "tamanhosIndisponiveis": [],
     "personalizavel": false,
-    "imagens": ["img/products/mei_o_futebol_profissional_03.jpg"],
+    "imagens": [],
     "descricao": "Meião profissional com reforço no calcanhar e ponteira, tecido de alta compressão e secagem rápida.",
     "destaque": false
   },
@@ -74,12 +98,21 @@
     "slug": "chuteira-futsal-pro",
     "nome": "Chuteira Futsal Pro",
     "categoria": "futsal",
-    "preco": 299.90,
+    "preco": 299.9,
     "precoPromo": null,
-    "tamanhos": ["37", "38", "39", "40", "41", "42", "43", "44"],
+    "tamanhos": [
+      "37",
+      "38",
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
     "tamanhosIndisponiveis": [],
     "personalizavel": false,
-    "imagens": ["img/products/chuteira-futsal.webp"],
+    "imagens": [],
     "descricao": "Chuteira de futsal com solado de borracha para aderência em quadra, cabedal reforçado e amortecimento em cada passo.",
     "destaque": true
   },
@@ -88,12 +121,14 @@
     "slug": "bola-de-futsal-max-500",
     "nome": "Bola de Futsal Máx. 500",
     "categoria": "futsal",
-    "preco": 189.90,
-    "precoPromo": 159.90,
-    "tamanhos": ["Único"],
+    "preco": 189.9,
+    "precoPromo": 159.9,
+    "tamanhos": [
+      "Único"
+    ],
     "tamanhosIndisponiveis": [],
     "personalizavel": false,
-    "imagens": ["img/products/bola_de_futsal_m_x_500_03.jpg"],
+    "imagens": [],
     "descricao": "Bola de futsal com baixo impacto, ideal para jogos de quadra, boa resposta ao toque e durabilidade.",
     "destaque": false
   },
@@ -102,12 +137,16 @@
     "slug": "luva-de-goleiro-futsal",
     "nome": "Luva de Goleiro Futsal",
     "categoria": "futsal",
-    "preco": 189.90,
+    "preco": 189.9,
     "precoPromo": null,
-    "tamanhos": ["P", "M", "G"],
+    "tamanhos": [
+      "P",
+      "M",
+      "G"
+    ],
     "tamanhosIndisponiveis": [],
     "personalizavel": false,
-    "imagens": ["img/products/luva_de_goleiro_futsal_01.jpg"],
+    "imagens": [],
     "descricao": "Luva de goleiro com palma em látex de alta aderência e punho ajustável para maior segurança nas defesas.",
     "destaque": false
   },
@@ -116,12 +155,14 @@
     "slug": "meiao-futsal-profissional",
     "nome": "Meião Futsal Profissional",
     "categoria": "futsal",
-    "preco": 39.90,
+    "preco": 39.9,
     "precoPromo": null,
-    "tamanhos": ["Único"],
+    "tamanhos": [
+      "Único"
+    ],
     "tamanhosIndisponiveis": [],
     "personalizavel": false,
-    "imagens": ["img/products/mei_o_futsal_profissional_25.jpg"],
+    "imagens": [],
     "descricao": "Meião profissional de futsal, tecido respirável com reforço em áreas de maior atrito.",
     "destaque": false
   },
@@ -130,12 +171,17 @@
     "slug": "camisa-futsal-dry-fit",
     "nome": "Camisa Futsal Dry-Fit",
     "categoria": "futsal",
-    "preco": 99.90,
+    "preco": 99.9,
     "precoPromo": null,
-    "tamanhos": ["P", "M", "G", "GG"],
+    "tamanhos": [
+      "P",
+      "M",
+      "G",
+      "GG"
+    ],
     "tamanhosIndisponiveis": [],
     "personalizavel": true,
-    "imagens": ["img/products/camisa_futsal_dry-fit_14.jpg"],
+    "imagens": [],
     "descricao": "Camisa de futsal em tecido dry-fit com ótima ventilação. Personalize com nome e número.",
     "destaque": false
   },
@@ -144,12 +190,21 @@
     "slug": "chuteira-society-turf",
     "nome": "Chuteira Society Turf",
     "categoria": "society",
-    "preco": 279.90,
+    "preco": 279.9,
     "precoPromo": null,
-    "tamanhos": ["37", "38", "39", "40", "41", "42", "43", "44"],
+    "tamanhos": [
+      "37",
+      "38",
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
     "tamanhosIndisponiveis": [],
     "personalizavel": false,
-    "imagens": ["img/products/chuteira_society_turf_01.jpg"],
+    "imagens": [],
     "descricao": "Chuteira society com solado multi-travas para grama sintética, tração e estabilidade em qualquer piso.",
     "destaque": true
   },
@@ -158,12 +213,14 @@
     "slug": "bola-society-oficial",
     "nome": "Bola Society Oficial",
     "categoria": "society",
-    "preco": 169.90,
+    "preco": 169.9,
     "precoPromo": null,
-    "tamanhos": ["Único"],
+    "tamanhos": [
+      "Único"
+    ],
     "tamanhosIndisponiveis": [],
     "personalizavel": false,
-    "imagens": ["img/products/bola_society_oficial_01.jpg"],
+    "imagens": [],
     "descricao": "Bola oficial de society, resistente ao atrito com grama sintética e ao calor do asfalto.",
     "destaque": false
   },
@@ -172,12 +229,14 @@
     "slug": "colete-de-treino-cx-c10",
     "nome": "Colete de Treino cx c/10",
     "categoria": "society",
-    "preco": 249.90,
+    "preco": 249.9,
     "precoPromo": null,
-    "tamanhos": ["Único"],
+    "tamanhos": [
+      "Único"
+    ],
     "tamanhosIndisponiveis": [],
     "personalizavel": true,
-    "imagens": ["img/products/colete_de_treino_cx_c_10_05.jpg"],
+    "imagens": [],
     "descricao": "Kit com 10 coletes de treino em tecido leve, ideal para separar equipes em treinos e peladas. Numeração sob consulta.",
     "destaque": false
   },
@@ -186,12 +245,17 @@
     "slug": "shorts-de-jogo-dry-fit",
     "nome": "Shorts de Jogo Dry-Fit",
     "categoria": "society",
-    "preco": 89.90,
+    "preco": 89.9,
     "precoPromo": null,
-    "tamanhos": ["P", "M", "G", "GG"],
+    "tamanhos": [
+      "P",
+      "M",
+      "G",
+      "GG"
+    ],
     "tamanhosIndisponiveis": [],
     "personalizavel": false,
-    "imagens": ["img/products/shorts_de_jogo_dry-fit_10.jpg"],
+    "imagens": [],
     "descricao": "Shorts de jogo em tecido dry-fit, leve e com boa liberdade de movimento.",
     "destaque": false
   },
@@ -200,12 +264,18 @@
     "slug": "kimono-jiu-jitsu-trancado-a2",
     "nome": "Kimono Jiu-Jitsu Trançado A2",
     "categoria": "jiujitsu",
-    "preco": 489.90,
-    "precoPromo": 429.90,
-    "tamanhos": ["A0", "A1", "A2", "A3", "A4"],
+    "preco": 489.9,
+    "precoPromo": 429.9,
+    "tamanhos": [
+      "A0",
+      "A1",
+      "A2",
+      "A3",
+      "A4"
+    ],
     "tamanhosIndisponiveis": [],
     "personalizavel": true,
-    "imagens": ["img/products/kimono.webp"],
+    "imagens": [],
     "descricao": "Kimono trançado de alta resistência, tecido reforçado nas áreas de maior atrito. Personalize com bordado de nome/faixa.",
     "destaque": true
   },
@@ -214,9 +284,14 @@
     "slug": "faixa-jiu-jitsu-oficial",
     "nome": "Faixa Jiu-Jitsu Oficial",
     "categoria": "jiujitsu",
-    "preco": 59.90,
+    "preco": 59.9,
     "precoPromo": null,
-    "tamanhos": ["A1", "A2", "A3", "A4"],
+    "tamanhos": [
+      "A1",
+      "A2",
+      "A3",
+      "A4"
+    ],
     "tamanhosIndisponiveis": [],
     "personalizavel": false,
     "imagens": [],
@@ -228,9 +303,14 @@
     "slug": "rash-guard-manga-longa",
     "nome": "Rash Guard Manga Longa",
     "categoria": "jiujitsu",
-    "preco": 129.90,
+    "preco": 129.9,
     "precoPromo": null,
-    "tamanhos": ["P", "M", "G", "GG"],
+    "tamanhos": [
+      "P",
+      "M",
+      "G",
+      "GG"
+    ],
     "tamanhosIndisponiveis": [],
     "personalizavel": false,
     "imagens": [],
@@ -242,9 +322,11 @@
     "slug": "protetor-bucal-duplo",
     "nome": "Protetor Bucal Duplo",
     "categoria": "jiujitsu",
-    "preco": 34.90,
+    "preco": 34.9,
     "precoPromo": null,
-    "tamanhos": ["Único"],
+    "tamanhos": [
+      "Único"
+    ],
     "tamanhosIndisponiveis": [],
     "personalizavel": false,
     "imagens": [],
@@ -256,12 +338,18 @@
     "slug": "kimono-infantil-jiu-jitsu",
     "nome": "Kimono Infantil Jiu-Jitsu",
     "categoria": "jiujitsu",
-    "preco": 289.90,
+    "preco": 289.9,
     "precoPromo": null,
-    "tamanhos": ["M0", "M1", "M2", "M3", "M4"],
+    "tamanhos": [
+      "M0",
+      "M1",
+      "M2",
+      "M3",
+      "M4"
+    ],
     "tamanhosIndisponiveis": [],
     "personalizavel": true,
-    "imagens": ["img/products/kimono-infantil.webp"],
+    "imagens": [],
     "descricao": "Kimono infantil leve e resistente, corte adequado para o movimento das crianças no tatame.",
     "destaque": false
   },
@@ -270,12 +358,16 @@
     "slug": "luva-de-boxe-muay-thai-imperial-gold-10oz",
     "nome": "Luva de Boxe/Muay Thai Imperial Gold 10oz",
     "categoria": "jiujitsu",
-    "preco": 149.90,
+    "preco": 149.9,
     "precoPromo": null,
-    "tamanhos": ["10oz", "12oz", "14oz"],
+    "tamanhos": [
+      "10oz",
+      "12oz",
+      "14oz"
+    ],
     "tamanhosIndisponiveis": [],
     "personalizavel": false,
-    "imagens": ["img/products/luva-muaythai.webp"],
+    "imagens": [],
     "descricao": "Luva de boxe/muay thai com espuma de alta densidade, fechamento em velcro e reforço nos nós dos dedos.",
     "destaque": false
   },
@@ -284,12 +376,14 @@
     "slug": "mochila-esportiva-impermeavel",
     "nome": "Mochila Esportiva Impermeável",
     "categoria": "acessorios",
-    "preco": 139.90,
+    "preco": 139.9,
     "precoPromo": null,
-    "tamanhos": ["Único"],
+    "tamanhos": [
+      "Único"
+    ],
     "tamanhosIndisponiveis": [],
     "personalizavel": false,
-    "imagens": ["img/products/mochila_esportiva_imperme_vel_02.jpg"],
+    "imagens": [],
     "descricao": "Mochila impermeável com compartimento para chuteiras e roupa suja, alças reforçadas.",
     "destaque": true
   },
@@ -298,12 +392,14 @@
     "slug": "garrafa-termica-squeeze-1l",
     "nome": "Garrafa Térmica Squeeze 1L",
     "categoria": "acessorios",
-    "preco": 49.90,
+    "preco": 49.9,
     "precoPromo": null,
-    "tamanhos": ["1L"],
+    "tamanhos": [
+      "1L"
+    ],
     "tamanhosIndisponiveis": [],
     "personalizavel": false,
-    "imagens": ["img/products/garrafa_t_rmica_squeeze_1l_05.jpg"],
+    "imagens": [],
     "descricao": "Garrafa térmica de 1 litro, mantém a temperatura por horas, ideal para treinos longos.",
     "destaque": false
   },
@@ -312,12 +408,14 @@
     "slug": "bomba-de-ar-mais-agulhas",
     "nome": "Bomba de Ar + Agulhas",
     "categoria": "acessorios",
-    "preco": 34.90,
+    "preco": 34.9,
     "precoPromo": null,
-    "tamanhos": ["Único"],
+    "tamanhos": [
+      "Único"
+    ],
     "tamanhosIndisponiveis": [],
     "personalizavel": false,
-    "imagens": ["img/products/bomba_de_ar_agulhas_01.jpg"],
+    "imagens": [],
     "descricao": "Bomba de ar compacta com duas agulhas de encaixe, ideal para manter suas bolas sempre calibradas.",
     "destaque": false
   },
@@ -326,12 +424,14 @@
     "slug": "kit-faixas-de-cabelo-3un",
     "nome": "Kit Faixas de Cabelo (3un)",
     "categoria": "acessorios",
-    "preco": 24.90,
+    "preco": 24.9,
     "precoPromo": null,
-    "tamanhos": ["Único"],
+    "tamanhos": [
+      "Único"
+    ],
     "tamanhosIndisponiveis": [],
     "personalizavel": false,
-    "imagens": ["img/products/kit_faixas_de_cabelo_3un_01.jpg"],
+    "imagens": [],
     "descricao": "Kit com 3 faixas de cabelo em tecido elástico, absorção de suor e ajuste confortável.",
     "destaque": false
   },
@@ -340,12 +440,21 @@
     "slug": "tenis-wilson-slice-3-0-all-court",
     "nome": "Tênis Wilson Slice 3.0 All Court",
     "categoria": "acessorios",
-    "preco": 259.90,
+    "preco": 259.9,
     "precoPromo": null,
-    "tamanhos": ["37", "38", "39", "40", "41", "42", "43", "44"],
+    "tamanhos": [
+      "37",
+      "38",
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
     "tamanhosIndisponiveis": [],
     "personalizavel": false,
-    "imagens": ["img/products/tenis-wilson.webp"],
+    "imagens": [],
     "descricao": "Tênis all court Wilson Slice 3.0, solado durável para quadras de saibro e piso duro.",
     "destaque": false
   }

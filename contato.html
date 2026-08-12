@@ -8,7 +8,7 @@
 <link rel="canonical" href="https://vitrineesporte.exemplo.com.br/contato.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/tokens.css">
 <link rel="stylesheet" href="css/base.css">
 <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
@@ -17,7 +17,14 @@
 
 <a href="#main" class="skip-link">Pular para o conteúdo</a>
 
-<nav class="nav-fixed">
+<div class="utility-bar">
+  <div class="wrap utility-bar-in">
+    <a href="#" data-wa-link target="_blank" rel="noopener">Fale no WhatsApp</a>
+    <a href="contato.html">Ajuda</a>
+  </div>
+</div>
+
+<nav class="primary-nav">
   <div class="wrap nav-in">
     <a href="index.html" class="wordmark">
       <img data-store-logo src="" alt="" style="display:none">
@@ -27,13 +34,16 @@
     <div class="nav-links" id="mainNav">
       <a href="colecao.html">Coleção</a>
       <a href="index.html#personalizar">Personalizar</a>
-      <a href="index.html#lookbook">Lookbook</a>
+      <a href="index.html#categorias">Categorias</a>
       <a href="entrega.html">Entrega</a>
       <a href="contato.html" class="active">Contato</a>
     </div>
     <div class="nav-right">
-      <button class="cart-btn" id="cartBtn" aria-label="Abrir sacola de compras">Sacola <span class="cart-count" id="cartCount">0</span></button>
-      <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="mainNav">
+      <button class="btn-icon-circular cart-btn" id="cartBtn" aria-label="Abrir sacola de compras">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l-1 13H7L6 7zM9 7a3 3 0 016 0"/></svg>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+      <button class="btn-icon-circular menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="mainNav">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
       </button>
     </div>
@@ -42,19 +52,19 @@
 <div class="nav-overlay" id="navOverlay"></div>
 
 <main id="main">
-  <section class="section wrap" style="padding-top:clamp(90px,10vw,140px)">
+  <section class="section wrap" style="padding-top:calc(64px + var(--space-section))">
     <div class="sec-head">
-      <div><span class="marker">( Fale com a gente )</span><h1 class="h-display">Contato</h1></div>
+      <div><span class="eyebrow">Fale com a gente</span><h1 class="heading-xl">Contato</h1></div>
     </div>
-    <div class="grid grid-2" style="background:transparent;border:none;gap:48px">
+    <div class="grid grid-2">
       <div class="info-card">
         <h3>Atendimento direto</h3>
         <p>Prefere falar direto? Chama a gente no WhatsApp ou Instagram.</p>
-        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px">
-          <a href="#" data-wa-link target="_blank" rel="noopener" class="btn">WhatsApp</a>
-          <a href="#" data-ig-link target="_blank" rel="noopener" class="btn btn-ghost">Instagram</a>
+        <div style="display:flex;gap:var(--space-md);flex-wrap:wrap;margin-top:var(--space-sm)">
+          <a href="#" data-wa-link target="_blank" rel="noopener" class="btn-primary">WhatsApp</a>
+          <a href="#" data-ig-link target="_blank" rel="noopener" class="btn-secondary">Instagram</a>
         </div>
-        <p style="margin-top:16px" data-store-cidade>Cidade</p>
+        <p style="margin-top:var(--space-lg)" data-store-cidade>Cidade</p>
       </div>
 
       <form class="contact-form" id="contactForm">
@@ -70,7 +80,7 @@
           <label for="ctMensagem">Mensagem</label>
           <textarea id="ctMensagem" rows="4" required aria-required="true"></textarea>
         </div>
-        <button type="submit" class="btn btn-block">Enviar pelo WhatsApp</button>
+        <button type="submit" class="btn-primary btn-block">Enviar pelo WhatsApp</button>
       </form>
     </div>
   </section>
@@ -78,28 +88,28 @@
 
 <div class="scrim" id="cartOverlay"></div>
 <aside class="drawer" id="cartDrawer" aria-label="Sacola de compras">
-  <div class="drawer-head"><strong>Sua sacola</strong><button class="modal-close" id="closeCart" aria-label="Fechar sacola">×</button></div>
+  <div class="drawer-head"><strong>Sua sacola</strong><button class="btn-icon-circular" id="closeCart" aria-label="Fechar sacola">×</button></div>
   <div class="drawer-body" id="cartItems"></div>
   <div class="drawer-foot">
     <p id="cartFreteMsg" class="drawer-note"></p>
     <div class="drawer-total"><span>Total</span><span id="cartSubtotal">R$ 0,00</span></div>
-    <button class="btn" id="checkoutBtn">Finalizar pelo WhatsApp</button>
+    <button class="btn-primary" id="checkoutBtn">Finalizar pelo WhatsApp</button>
     <p class="drawer-note">*Valores finais, formas de pagamento e frete serão confirmados diretamente pelo WhatsApp.</p>
   </div>
 </aside>
 
-<footer class="foot">
+<footer class="footer">
   <div class="wrap">
-    <div class="foot-top">
-      <div>
-        <h2>Bora<br>vestir?</h2>
-        <div style="margin-top:28px"><a href="#" data-wa-link target="_blank" rel="noopener" class="btn" style="background:#fff;color:#0A0A0A;border-color:#fff">Chamar no WhatsApp</a></div>
+    <div class="footer-top">
+      <div class="footer-cta">
+        <h2 class="display-campaign">Bora vestir?</h2>
+        <div style="margin-top:var(--space-xl)"><a href="#" data-wa-link target="_blank" rel="noopener" class="btn-primary">Chamar no WhatsApp</a></div>
       </div>
-      <div class="foot-col"><h5>Loja</h5><a href="colecao.html?categoria=futebol">Futebol</a><a href="colecao.html?categoria=futsal">Futsal</a><a href="colecao.html?categoria=jiujitsu">Jiu-Jitsu</a><a href="index.html#personalizar">Personalizar</a></div>
-      <div class="foot-col"><h5>Ajuda</h5><a href="entrega.html">Entrega e pagamento</a><a href="contato.html">Contato</a><a href="colecao.html">Ver coleção</a></div>
-      <div class="foot-col"><h5>Contato</h5><a href="#" data-wa-link target="_blank" rel="noopener">WhatsApp</a><a href="#" data-ig-link target="_blank" rel="noopener">Instagram</a><p data-store-cidade>Cidade</p></div>
+      <div class="footer-col"><h5>Loja</h5><a href="colecao.html?categoria=futebol">Futebol</a><a href="colecao.html?categoria=futsal">Futsal</a><a href="colecao.html?categoria=jiujitsu">Jiu-Jitsu</a><a href="index.html#personalizar">Personalizar</a></div>
+      <div class="footer-col"><h5>Ajuda</h5><a href="entrega.html">Entrega e pagamento</a><a href="contato.html">Contato</a><a href="colecao.html">Ver coleção</a></div>
+      <div class="footer-col"><h5>Contato</h5><a href="#" data-wa-link target="_blank" rel="noopener">WhatsApp</a><a href="#" data-ig-link target="_blank" rel="noopener">Instagram</a><p data-store-cidade>Cidade</p></div>
     </div>
-    <div class="foot-bot"><span>© <span id="year"></span> <span data-store-name>Loja</span></span><span>Site por NADA Studio · do nada nasce tudo</span></div>
+    <div class="footer-bot"><span class="utility-xs">© <span id="year"></span> <span data-store-name>Loja</span></span><span class="utility-xs">Site por NADA Studio · do nada nasce tudo</span></div>
   </div>
 </footer>
 

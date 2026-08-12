@@ -34,18 +34,9 @@ const Store = (() => {
     jiujitsu: "Jiu-Jitsu", acessorios: "Acessórios",
   };
 
-  /* ícone-rascunho genérico usado quando a foto do produto não existe */
-  function placeholderSvg() {
-    return `<svg class="placeholder-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="24" cy="24" r="18"/><path d="M24 12l7 5-3 8h-8l-3-8zM24 30v6M17 25l-9-1M31 25l9-1"/>
-    </svg>`;
-  }
-  /* imagem real (se existir) sobre o ícone-rascunho — usado em locais
-     sem o efeito "número gigante" (sacola, galeria da PDP) */
-  function mediaMarkup(imagens, alt) {
-    const src = imagens && imagens[0];
-    return `${src ? `<img src="${src}" alt="${escapeHtml(alt || "")}" loading="lazy" onerror="this.style.display='none'">` : ""}${placeholderSvg()}`;
-  }
+  /* Site sem fotografia: onde o sistema Nike pediria uma foto (card de
+     produto, sacola, PDP), o bloco de mídia fica --color-soft-cloud
+     vazio — sem ícone, sem SVG, sem inicial do nome. É deliberado. */
 
   /* ---------------- carga de dados ---------------- */
   async function loadData() {
@@ -132,19 +123,17 @@ const Store = (() => {
     if (image) setMeta("og:image", image, "property");
   }
   function setProductSeo(p) {
-    const img = p.imagens && p.imagens[0];
     setPageSeo({
       title: `${p.nome} | ${CONFIG.nome}`,
       description: p.descricao,
-      image: img,
     });
+    /* sem campo "image": produto sem foto é válido no schema.org Product */
     injectJsonLd("ld-product", {
       "@context": "https://schema.org",
       "@type": "Product",
       "sku": p.sku,
       "name": p.nome,
       "description": p.descricao,
-      "image": img ? [img] : [],
       "offers": {
         "@type": "Offer",
         "priceCurrency": "BRL",
@@ -174,27 +163,25 @@ const Store = (() => {
   }
 
   /* ---------------- catálogo / render ---------------- */
-  function productCardHtml(p, i) {
+  /* product-card do sistema Nike: mídia = bloco --color-soft-cloud vazio
+     (sem foto, sem ícone), metadados abaixo com spacing.sm entre linhas. */
+  function productCardHtml(p) {
     const promo = p.precoPromo != null;
-    const num = String(i + 1).padStart(2, "0");
-    const src = p.imagens && p.imagens[0];
     const href = `produto.html?p=${encodeURIComponent(p.slug)}`;
     return `
-      <article class="card" data-sku="${p.sku}">
-        <div class="card-media">
-          ${promo ? `<span class="card-flag">Oferta</span>` : ""}
-          <div class="card-num">${num}</div>
-          <a href="${href}">${src ? `<img src="${src}" alt="${escapeHtml(p.nome)}" loading="lazy" onerror="this.remove()">` : placeholderSvg()}</a>
-          <button type="button" class="card-quick" data-sku="${p.sku}">Adicionar à sacola</button>
-        </div>
-        <a href="${href}" class="card-info-link">
-          <div class="card-info">
-            <h3>${escapeHtml(p.nome)}</h3>
-            <div class="card-meta">
-              <span class="card-price">${promo ? `<span class="card-price-old">${currency(p.preco)}</span>` : ""}${currency(precoFinal(p))}</span>
-              <span class="card-sizes">${(p.tamanhos || []).join(" · ")}</span>
-            </div>
-          </div>
+      <article class="product-card" data-sku="${p.sku}">
+        <a href="${href}" class="product-card-media" aria-label="${escapeHtml(p.nome)}">
+          ${promo ? `<span class="badge-promo">Oferta</span>` : ""}
+          <span class="product-card-quick">
+            <button type="button" class="btn-icon-circular" data-sku="${p.sku}" aria-label="Adicionar ${escapeHtml(p.nome)} à sacola" title="Adicionar à sacola">+</button>
+          </span>
+        </a>
+        <a href="${href}" class="product-card-body">
+          <span class="product-card-name">${escapeHtml(p.nome)}</span>
+          <span class="product-card-cat">${escapeHtml(CATEGORY_LABELS[p.categoria] || p.categoria)}</span>
+          <span class="product-card-price">
+            ${promo ? `<span class="old">${currency(p.preco)}</span><span class="sale">${currency(precoFinal(p))}</span>` : currency(precoFinal(p))}
+          </span>
         </a>
       </article>`;
   }
@@ -206,8 +193,8 @@ const Store = (() => {
       grid.innerHTML = `<p class="filters-empty">Nenhum produto encontrado.</p>`;
       return;
     }
-    grid.innerHTML = list.map((p, i) => productCardHtml(p, i)).join("");
-    grid.querySelectorAll(".card-quick").forEach(btn => {
+    grid.innerHTML = list.map(p => productCardHtml(p)).join("");
+    grid.querySelectorAll("[data-sku]").forEach(btn => {
       btn.addEventListener("click", (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -215,6 +202,17 @@ const Store = (() => {
         showToast("Adicionado à sacola ✓");
       });
     });
+  }
+
+  /* ---------------- rail "compre por categoria" ---------------- */
+  function renderCategoryRail(elId) {
+    const el = document.getElementById(elId);
+    if (!el) return;
+    const categorias = [...new Set(PRODUCTS.map(p => p.categoria))];
+    el.innerHTML = categorias.map(c => `
+      <a class="category-tile" href="colecao.html?categoria=${encodeURIComponent(c)}">
+        <span>${escapeHtml(CATEGORY_LABELS[c] || c)}</span>
+      </a>`).join("");
   }
 
   /* ---------------- coleção: filtros ---------------- */
@@ -230,17 +228,17 @@ const Store = (() => {
     let activeCategory = qs("categoria") || "todos";
 
     function chipHtml(value, label) {
-      return `<button class="chip${activeCategory === value ? " on" : ""}" data-value="${value}" aria-pressed="${activeCategory === value}">${label}</button>`;
+      return `<button class="filter-chip${activeCategory === value ? " filter-chip-active" : ""}" data-value="${value}" aria-pressed="${activeCategory === value}">${label}</button>`;
     }
     if (chipsEl) {
       chipsEl.innerHTML = [chipHtml("todos", "Todos")]
         .concat(categorias.map(c => chipHtml(c, CATEGORY_LABELS[c] || c)))
         .join("");
-      chipsEl.querySelectorAll(".chip").forEach(btn => {
+      chipsEl.querySelectorAll(".filter-chip").forEach(btn => {
         btn.addEventListener("click", () => {
           activeCategory = btn.dataset.value;
-          chipsEl.querySelectorAll(".chip").forEach(b => {
-            b.classList.toggle("on", b === btn);
+          chipsEl.querySelectorAll(".filter-chip").forEach(b => {
+            b.classList.toggle("filter-chip-active", b === btn);
             b.setAttribute("aria-pressed", String(b === btn));
           });
           applyFilters();
@@ -266,12 +264,15 @@ const Store = (() => {
     if (document.body.dataset.page !== "home") return;
     const grid = document.getElementById("productsGrid");
     if (grid) renderGrid("productsGrid", PRODUCTS.filter(p => p.destaque));
+    renderCategoryRail("categoryRail");
   }
 
   /* ---------------- personalizador genérico (home) ----------------
-     Bloco "monte sua camisa" fora do catálogo, com preview SVG ao
-     vivo. Vira um item de linha customizado na MESMA sacola/checkout
-     usados pelo resto do site (addToCart / buildWhatsappMessage). */
+     Bloco "monte sua camisa" fora do catálogo. Sem preview de camisa
+     (zero imagem/SVG ilustrativo) — feedback ao vivo é só tipográfico:
+     um cartão --color-ink com o nome/número digitados em
+     display-campaign. Vira um item de linha customizado na MESMA
+     sacola/checkout usados pelo resto do site. */
   function initHomeCustomizer() {
     if (document.body.dataset.page !== "home") return;
     const nomeEl = document.getElementById("pzHomeNome");
@@ -297,8 +298,8 @@ const Store = (() => {
     });
 
     function pinta() {
-      if (previewNome) previewNome.textContent = (nomeEl.value || "").toUpperCase();
-      if (previewNumero) previewNumero.textContent = numEl.value || "";
+      if (previewNome) previewNome.textContent = (nomeEl.value || "").toUpperCase() || "SEU NOME";
+      if (previewNumero) previewNumero.textContent = numEl.value || "00";
     }
     nomeEl.addEventListener("input", pinta);
     numEl?.addEventListener("input", pinta);
@@ -331,12 +332,9 @@ const Store = (() => {
 
     setProductSeo(p);
 
-    let currentImage = 0;
     let selectedSize = null;
     let qty = 1;
 
-    const mainImageEl = document.getElementById("pdpMainImage");
-    const thumbsEl = document.getElementById("pdpThumbs");
     const sizeGridEl = document.getElementById("pdpSizeGrid");
     const personalizeEl = document.getElementById("pdpPersonalize");
     const qtyValueEl = document.getElementById("pdpQtyValue");
@@ -356,23 +354,6 @@ const Store = (() => {
       oldPriceEl.style.display = "none";
     }
     document.getElementById("pdpPrice").textContent = currency(precoFinal(p));
-
-    function renderGallery() {
-      const imgs = p.imagens && p.imagens.length ? p.imagens : [null];
-      const src = imgs[currentImage];
-      mainImageEl.innerHTML = src
-        ? `<img src="${src}" alt="${escapeHtml(p.nome)}" onerror="this.style.display='none'">`
-        : placeholderSvg();
-      thumbsEl.innerHTML = imgs.map((img, i) => `
-        <button class="pdp-thumb" data-i="${i}" aria-current="${i === currentImage}" aria-label="Ver imagem ${i + 1} de ${p.nome}">
-          ${img ? `<img src="${img}" alt="${escapeHtml(p.nome)} — imagem ${i + 1}" onerror="this.style.display='none'">` : ""}
-        </button>`).join("");
-      thumbsEl.querySelectorAll(".pdp-thumb").forEach(btn => {
-        btn.addEventListener("click", () => { currentImage = Number(btn.dataset.i); renderGallery(); });
-      });
-      if (imgs.length <= 1) thumbsEl.style.display = "none";
-    }
-    renderGallery();
 
     function renderSizes() {
       if (!p.tamanhos || !p.tamanhos.length) { sizeGridEl.closest(".pdp-block").style.display = "none"; return; }
@@ -515,7 +496,7 @@ const Store = (() => {
       const meta = cartItemMeta(item);
       return `
         <div class="ci">
-          <div class="ci-thumb">${mediaMarkup(p.imagens, p.nome)}</div>
+          <span class="ci-thumb" aria-hidden="true"></span>
           <div class="ci-info">
             <h4>${escapeHtml(p.nome)}</h4>
             ${meta ? `<span>${escapeHtml(meta)}</span>` : ""}
@@ -617,10 +598,10 @@ const Store = (() => {
   }
 
   function initFaq() {
-    document.querySelectorAll(".faq-item").forEach(item => {
+    document.querySelectorAll(".faq-row").forEach(item => {
       item.querySelector(".faq-question")?.addEventListener("click", () => {
         const wasOpen = item.classList.contains("open");
-        item.parentElement.querySelectorAll(".faq-item").forEach(i => i.classList.remove("open"));
+        item.parentElement.querySelectorAll(".faq-row").forEach(i => i.classList.remove("open"));
         if (!wasOpen) item.classList.add("open");
       });
     });
