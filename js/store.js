@@ -216,23 +216,42 @@ const Store = (() => {
   }
 
   /* ---------------- coleção: filtros ---------------- */
+  /* ordena por: numérico crescente primeiro, depois letras na ordem de tamanho */
+  const SIZE_ORDER = ["PP", "P", "M", "G", "GG", "XG", "ÚNICO", "UNICO"];
+  function sortSizes(sizes) {
+    return [...sizes].sort((a, b) => {
+      const na = Number(a), nb = Number(b);
+      if (!isNaN(na) && !isNaN(nb)) return na - nb;
+      if (!isNaN(na)) return -1;
+      if (!isNaN(nb)) return 1;
+      return SIZE_ORDER.indexOf(a) - SIZE_ORDER.indexOf(b);
+    });
+  }
+
   function initCollection() {
     if (document.body.dataset.page !== "colecao") return;
     const grid = document.getElementById("productsGrid");
     if (!grid) return;
 
     const chipsEl = document.getElementById("categoryChips");
+    const sizeChipsEl = document.getElementById("sizeChips");
+    const promoBtn = document.getElementById("promoChip");
+    const sortEl = document.getElementById("sortSelect");
     const searchEl = document.getElementById("searchInput");
     const categorias = [...new Set(PRODUCTS.map(p => p.categoria))];
+    const tamanhos = sortSizes([...new Set(PRODUCTS.flatMap(p => p.tamanhos || []))]);
 
     let activeCategory = qs("categoria") || "todos";
+    let activeTamanho = qs("tamanho") || "todos";
+    let onlyPromo = qs("promo") === "1";
 
-    function chipHtml(value, label) {
-      return `<button class="filter-chip${activeCategory === value ? " filter-chip-active" : ""}" data-value="${value}" aria-pressed="${activeCategory === value}">${label}</button>`;
+    function chipHtml(value, label, active) {
+      return `<button type="button" class="filter-chip${active ? " filter-chip-active" : ""}" data-value="${value}" aria-pressed="${active}">${label}</button>`;
     }
+
     if (chipsEl) {
-      chipsEl.innerHTML = [chipHtml("todos", "Todos")]
-        .concat(categorias.map(c => chipHtml(c, CATEGORY_LABELS[c] || c)))
+      chipsEl.innerHTML = [chipHtml("todos", "Todos", activeCategory === "todos")]
+        .concat(categorias.map(c => chipHtml(c, CATEGORY_LABELS[c] || c, activeCategory === c)))
         .join("");
       chipsEl.querySelectorAll(".filter-chip").forEach(btn => {
         btn.addEventListener("click", () => {
@@ -246,17 +265,51 @@ const Store = (() => {
       });
     }
 
+    if (sizeChipsEl) {
+      sizeChipsEl.innerHTML = [chipHtml("todos", "Todos", activeTamanho === "todos")]
+        .concat(tamanhos.map(t => chipHtml(t, t, activeTamanho === t)))
+        .join("");
+      sizeChipsEl.querySelectorAll(".filter-chip").forEach(btn => {
+        btn.addEventListener("click", () => {
+          activeTamanho = btn.dataset.value;
+          sizeChipsEl.querySelectorAll(".filter-chip").forEach(b => {
+            b.classList.toggle("filter-chip-active", b === btn);
+            b.setAttribute("aria-pressed", String(b === btn));
+          });
+          applyFilters();
+        });
+      });
+    }
+
+    if (promoBtn) {
+      promoBtn.classList.toggle("filter-chip-active", onlyPromo);
+      promoBtn.setAttribute("aria-pressed", String(onlyPromo));
+      promoBtn.addEventListener("click", () => {
+        onlyPromo = !onlyPromo;
+        promoBtn.classList.toggle("filter-chip-active", onlyPromo);
+        promoBtn.setAttribute("aria-pressed", String(onlyPromo));
+        applyFilters();
+      });
+    }
+
     function applyFilters() {
       const term = (searchEl?.value || "").trim().toLowerCase();
-      const list = PRODUCTS.filter(p => {
+      let list = PRODUCTS.filter(p => {
         const matchCat = activeCategory === "todos" || p.categoria === activeCategory;
         const matchTerm = !term || p.nome.toLowerCase().includes(term);
-        return matchCat && matchTerm;
+        const matchTamanho = activeTamanho === "todos"
+          || ((p.tamanhos || []).includes(activeTamanho) && !(p.tamanhosIndisponiveis || []).includes(activeTamanho));
+        const matchPromo = !onlyPromo || p.precoPromo != null;
+        return matchCat && matchTerm && matchTamanho && matchPromo;
       });
+      const ordem = sortEl?.value || "relevancia";
+      if (ordem === "menor-preco") list = [...list].sort((a, b) => precoFinal(a) - precoFinal(b));
+      if (ordem === "maior-preco") list = [...list].sort((a, b) => precoFinal(b) - precoFinal(a));
       renderGrid("productsGrid", list);
     }
 
     searchEl?.addEventListener("input", applyFilters);
+    sortEl?.addEventListener("change", applyFilters);
     applyFilters();
   }
 

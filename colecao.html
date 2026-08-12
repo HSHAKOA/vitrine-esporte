@@ -57,9 +57,20 @@
       <div><span class="eyebrow">Catálogo completo</span><h1 class="heading-xl">Coleção</h1></div>
     </div>
 
-    <div class="filters-bar" role="group" aria-label="Filtrar por categoria">
+    <div class="filters-bar" role="group" aria-label="Filtrar produtos">
       <input type="search" id="searchInput" class="search-pill" placeholder="Buscar produto..." aria-label="Buscar produto">
+      <select id="sortSelect" class="filter-chip" aria-label="Ordenar por">
+        <option value="relevancia">Relevância</option>
+        <option value="menor-preco">Menor preço</option>
+        <option value="maior-preco">Maior preço</option>
+      </select>
+      <button type="button" class="filter-chip" id="promoChip" aria-pressed="false">Promoções</button>
+    </div>
+    <div class="filters-bar" role="group" aria-label="Filtrar por categoria">
       <div class="filters" id="categoryChips"></div>
+    </div>
+    <div class="filters-bar" role="group" aria-label="Filtrar por tamanho">
+      <div class="filters" id="sizeChips"></div>
     </div>
     <div class="grid" id="productsGrid"></div>
   </section>
@@ -84,7 +95,7 @@
         <h2 class="display-campaign">Bora vestir?</h2>
         <div style="margin-top:var(--space-xl)"><a href="#" data-wa-link target="_blank" rel="noopener" class="btn-primary">Chamar no WhatsApp</a></div>
       </div>
-      <div class="footer-col"><h5>Loja</h5><a href="colecao.html?categoria=futebol">Futebol</a><a href="colecao.html?categoria=futsal">Futsal</a><a href="colecao.html?categoria=jiujitsu">Jiu-Jitsu</a><a href="index.html#personalizar">Personalizar</a></div>
+      <div class="footer-col"><h5>Loja</h5><a href="colecao.html?promo=1">Promoções</a><a href="colecao.html?categoria=futebol">Futebol</a><a href="colecao.html?categoria=futsal">Futsal</a><a href="colecao.html?categoria=jiujitsu">Jiu-Jitsu</a><a href="index.html#personalizar">Personalizar</a></div>
       <div class="footer-col"><h5>Ajuda</h5><a href="entrega.html">Entrega e pagamento</a><a href="contato.html">Contato</a><a href="colecao.html">Ver coleção</a></div>
       <div class="footer-col"><h5>Contato</h5><a href="#" data-wa-link target="_blank" rel="noopener">WhatsApp</a><a href="#" data-ig-link target="_blank" rel="noopener">Instagram</a><p data-store-cidade>Cidade</p></div>
     </div>

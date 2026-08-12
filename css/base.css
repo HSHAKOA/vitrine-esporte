@@ -175,6 +175,7 @@ ul{list-style:none}
   transition:background var(--dur-fast) ease,color var(--dur-fast) ease;
 }
 .filter-chip.filter-chip-active{background:var(--color-ink);color:var(--color-on-primary);border-color:var(--color-ink)}
+select.filter-chip{cursor:pointer;height:40px;-webkit-appearance:none;appearance:none}
 .search-pill{
   flex:1 1 220px;min-width:0;background:var(--color-soft-cloud);border:2px solid transparent;border-radius:var(--radius-md);
   height:40px;padding:8px 16px;color:var(--color-ink);font-family:var(--font-body);font-size:var(--fs-body-md);
