@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contato | Vitrine Esporte</title>
+<meta name="description" content="Fale com a loja pelo WhatsApp ou Instagram.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="icon" type="image/svg+xml" href="img/favicon.svg">
+</head>
+<body data-page="contato">
+
+<a href="#main" class="skip-link">Pular para o conteúdo</a>
+
+<header class="header">
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <img data-store-logo src="img/logo/logo-mark.png" alt="" class="logo-icon">
+      <span class="logo-text"><span class="logo-mark" data-store-name>Loja</span><span class="logo-sub">VITRINE</span></span>
+    </a>
+    <nav class="nav" id="mainNav" aria-label="Navegação principal">
+      <a href="index.html">Início</a>
+      <a href="colecao.html">Coleção</a>
+      <a href="entrega.html">Entrega</a>
+      <a href="contato.html" class="active">Contato</a>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-btn" id="cartBtn" aria-label="Abrir sacola de compras">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4"/><path d="M3 6h18"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+      <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="mainNav">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+<div class="nav-overlay" id="navOverlay"></div>
+
+<main id="main">
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-eyebrow">Fale com a gente</span>
+        <h1 class="section-title">Contato</h1>
+      </div>
+      <div class="grid grid-2">
+        <div class="info-card">
+          <h3>Atendimento direto</h3>
+          <p>Prefere falar direto? Chama a gente no WhatsApp ou Instagram.</p>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px">
+            <a href="#" data-wa-link target="_blank" rel="noopener" class="btn btn-whatsapp">WhatsApp</a>
+            <a href="#" data-ig-link target="_blank" rel="noopener" class="btn btn-outline">Instagram</a>
+          </div>
+          <p style="margin-top:16px" data-store-cidade>Cidade</p>
+        </div>
+
+        <form class="contact-form" id="contactForm">
+          <div class="field">
+            <label for="ctNome">Nome</label>
+            <input type="text" id="ctNome" required aria-required="true">
+          </div>
+          <div class="field">
+            <label for="ctAssunto">Assunto</label>
+            <input type="text" id="ctAssunto" placeholder="Ex.: Dúvida sobre um produto">
+          </div>
+          <div class="field">
+            <label for="ctMensagem">Mensagem</label>
+            <textarea id="ctMensagem" rows="4" required aria-required="true"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Enviar pelo WhatsApp</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<aside class="cart-drawer" id="cartDrawer" aria-label="Sacola de compras">
+  <div class="cart-head"><h3>Sua sacola</h3><button class="modal-close" id="closeCart" aria-label="Fechar sacola">✕</button></div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-foot">
+    <p id="cartFreteMsg" class="cart-note"></p>
+    <div class="cart-total-row"><span>Subtotal</span><span id="cartSubtotal">R$ 0,00</span></div>
+    <button class="btn btn-whatsapp btn-block" id="checkoutBtn">Finalizar pelo WhatsApp</button>
+    <p class="cart-note">*Valores finais, formas de pagamento e frete serão confirmados diretamente pelo WhatsApp.</p>
+  </div>
+</aside>
+<div class="nav-overlay" id="cartOverlay"></div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4 data-store-name>Loja</h4>
+        <p data-store-tagline>Tagline</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navegação</h4>
+        <a href="index.html">Início</a>
+        <a href="colecao.html">Coleção</a>
+        <a href="entrega.html">Entrega</a>
+        <a href="contato.html">Contato</a>
+      </div>
+      <div class="footer-col">
+        <h4>Fale conosco</h4>
+        <a data-wa-link href="#" target="_blank" rel="noopener">WhatsApp</a>
+        <a data-ig-link href="#" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> <span data-store-name>Loja</span>. Todos os direitos reservados.</span>
+      <span data-store-cidade>Cidade</span>
+    </div>
+  </div>
+</footer>
+
+<a href="#" class="whatsapp-float" id="whatsFloat" data-wa-link aria-label="Falar no WhatsApp" target="_blank" rel="noopener">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2zm5.6 14.3c-.2.6-1.3 1.2-1.9 1.3-.5.1-1.1.1-1.8-.1-.4-.1-1-.3-1.6-.6-2.9-1.2-4.7-4.2-4.9-4.4-.1-.2-1.2-1.6-1.2-3 0-1.4.7-2.1 1-2.4.3-.3.6-.3.8-.3h.5c.2 0 .4 0 .6.5.2.5.7 1.8.8 1.9.1.1.1.3 0 .5-.1.2-.1.3-.3.5-.1.2-.3.4-.4.5-.1.1-.3.3-.1.6.2.3.9 1.5 1.9 2.4 1.3 1.2 2.4 1.5 2.7 1.7.3.2.5.1.6-.1.2-.2.7-.8.9-1.1.2-.3.4-.2.6-.1.2.1 1.5.7 1.8.8.3.1.5.2.5.3.1.2.1.6-.1 1.2z"/></svg>
+</a>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="js/store.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("contactForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const res = await fetch("data/config.json");
+      const cfg = await res.json();
+      const nome = document.getElementById("ctNome").value.trim();
+      const assunto = document.getElementById("ctAssunto").value.trim();
+      const mensagem = document.getElementById("ctMensagem").value.trim();
+      const lines = [
+        `Olá! Meu nome é ${nome}.`,
+        assunto ? `Assunto: ${assunto}` : "",
+        "",
+        mensagem,
+      ].filter(Boolean);
+      window.open(`https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent(lines.join("\n"))}`, "_blank");
+    });
+  });
+</script>
+</body>
+</html>

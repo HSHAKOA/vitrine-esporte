@@ -1,0 +1,15 @@
+{
+  "nome": "Salute Sports",
+  "tagline": "A loja dos atletas da vida real",
+  "descricao": "Artigos esportivos profissionais para Futebol, Futsal, Society e Jiu-Jitsu. Monte seu pedido e finalize direto pelo WhatsApp.",
+  "whatsapp": "5511913497076",
+  "instagram": "https://instagram.com/salutesports",
+  "cidade": "São Paulo, SP",
+  "prazoEntrega": "Envio em até 2 dias úteis após a confirmação do pedido. Prazo de entrega combinado pelo WhatsApp de acordo com o seu CEP.",
+  "pagamentos": ["Pix", "Cartão de crédito", "Cartão de débito"],
+  "freteGratisAcima": 350,
+  "corDestaque": "#FF5A00",
+  "logo": "img/logo/logo-mark.png",
+  "favicon": "img/favicon.svg",
+  "greeting": "Olá! Vim pelo site da Salute Sports e quero fazer o seguinte pedido:"
+}

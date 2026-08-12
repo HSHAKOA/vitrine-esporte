@@ -1,0 +1,13 @@
+.DS_Store
+Thumbs.db
+*.log
+
+# pastas internas de trabalho (prints, referências) — não fazem parte do site
+Instruções/
+Print do erro/
+
+# imagem não usada (arte com personagem protegido por direitos autorais)
+img/brands/jiu jitsu.png
+
+# arquivo de skill pessoal, não faz parte do site
+avoid-ai-writing.md

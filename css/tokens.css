@@ -1,0 +1,63 @@
+/* =========================================================
+   VITRINE-ESPORTE — TOKENS
+   Única fonte de cor/medida do template. Nenhuma outra folha
+   de estilo deve declarar cores ou medidas fora destas variáveis.
+   O JS pode sobrescrever --accent* em runtime a partir de
+   data/config.json (campo corDestaque) para white-label.
+   ========================================================= */
+:root{
+  /* cor de marca (fallback; store.js sobrescreve via corDestaque) */
+  --accent:#FF5A00;
+  --accent-2:#FF6A00;
+  --accent-dark:#D93E00;
+  --gradient: linear-gradient(135deg, var(--accent-2) 0%, var(--accent) 50%, var(--accent-dark) 100%);
+
+  /* neutros */
+  --white:#FFFFFF;
+  --gray-light:#DADADA;
+  --gray-mid:#8A8F98;
+  --bg:#0A0C10;
+  --bg-secondary:#171A20;
+  --card:#20242B;
+  --line:#2D323B;
+
+  /* texto */
+  --text:#F5F6F7;
+  --text-muted:#A7ACB5;
+
+  /* semântica */
+  --success:#2FB86E;
+  --error:#E6483C;
+  --warning:#F0A93C;
+
+  /* foco / acessibilidade */
+  --focus-ring:#FFFFFF;
+  --focus-ring-offset:2px;
+
+  /* geometria */
+  --radius:12px;
+  --radius-card:16px;
+  --radius-sm:8px;
+  --gap:24px;
+  --maxw:1280px;
+  --section-space:96px;
+  --section-space-sm:56px;
+
+  /* sombra */
+  --shadow-card: 0 8px 24px rgba(0,0,0,.35);
+  --shadow-pop: 0 16px 48px rgba(0,0,0,.5);
+
+  /* tipografia */
+  --font-body:'Inter', sans-serif;
+  --font-head:'Rajdhani', sans-serif;
+
+  /* transições */
+  --ease: cubic-bezier(.4,0,.2,1);
+  --dur-fast: .15s;
+  --dur: .25s;
+  --dur-slow: .4s;
+}
+
+@media (prefers-reduced-motion: reduce){
+  :root{ --dur-fast: 0s; --dur: 0s; --dur-slow: 0s; }
+}

@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Entrega | Vitrine Esporte</title>
+<meta name="description" content="Prazos de entrega e formas de pagamento.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="icon" type="image/svg+xml" href="img/favicon.svg">
+</head>
+<body data-page="entrega">
+
+<a href="#main" class="skip-link">Pular para o conteúdo</a>
+
+<header class="header">
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <img data-store-logo src="img/logo/logo-mark.png" alt="" class="logo-icon">
+      <span class="logo-text"><span class="logo-mark" data-store-name>Loja</span><span class="logo-sub">VITRINE</span></span>
+    </a>
+    <nav class="nav" id="mainNav" aria-label="Navegação principal">
+      <a href="index.html">Início</a>
+      <a href="colecao.html">Coleção</a>
+      <a href="entrega.html" class="active">Entrega</a>
+      <a href="contato.html">Contato</a>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-btn" id="cartBtn" aria-label="Abrir sacola de compras">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4"/><path d="M3 6h18"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+      <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="mainNav">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+<div class="nav-overlay" id="navOverlay"></div>
+
+<main id="main">
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-eyebrow">Como funciona</span>
+        <h1 class="section-title">Entrega e pagamento</h1>
+      </div>
+      <div class="grid grid-3">
+        <div class="info-card">
+          <h3>Prazo de entrega</h3>
+          <p id="entregaPrazo">Carregando...</p>
+        </div>
+        <div class="info-card">
+          <h3>Formas de pagamento</h3>
+          <div class="tag-list" id="entregaPagamentos"></div>
+        </div>
+        <div class="info-card">
+          <h3>Frete grátis</h3>
+          <p id="entregaFrete">Carregando...</p>
+        </div>
+      </div>
+
+      <div class="section-head" style="margin-top:56px">
+        <span class="section-eyebrow">Passo a passo</span>
+        <h2 class="section-title">Como finalizar seu pedido</h2>
+      </div>
+      <div class="grid grid-3">
+        <div class="info-card"><h3>1. Monte a sacola</h3><p>Escolha os produtos, tamanhos e personalizações na coleção.</p></div>
+        <div class="info-card"><h3>2. Envie pelo WhatsApp</h3><p>Finalize e a mensagem com todos os itens é montada automaticamente.</p></div>
+        <div class="info-card"><h3>3. Combine e receba</h3><p>Confirmamos pagamento, frete/retirada e enviamos seu pedido.</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<aside class="cart-drawer" id="cartDrawer" aria-label="Sacola de compras">
+  <div class="cart-head"><h3>Sua sacola</h3><button class="modal-close" id="closeCart" aria-label="Fechar sacola">✕</button></div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-foot">
+    <p id="cartFreteMsg" class="cart-note"></p>
+    <div class="cart-total-row"><span>Subtotal</span><span id="cartSubtotal">R$ 0,00</span></div>
+    <button class="btn btn-whatsapp btn-block" id="checkoutBtn">Finalizar pelo WhatsApp</button>
+    <p class="cart-note">*Valores finais, formas de pagamento e frete serão confirmados diretamente pelo WhatsApp.</p>
+  </div>
+</aside>
+<div class="nav-overlay" id="cartOverlay"></div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4 data-store-name>Loja</h4>
+        <p data-store-tagline>Tagline</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navegação</h4>
+        <a href="index.html">Início</a>
+        <a href="colecao.html">Coleção</a>
+        <a href="entrega.html">Entrega</a>
+        <a href="contato.html">Contato</a>
+      </div>
+      <div class="footer-col">
+        <h4>Fale conosco</h4>
+        <a data-wa-link href="#" target="_blank" rel="noopener">WhatsApp</a>
+        <a data-ig-link href="#" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> <span data-store-name>Loja</span>. Todos os direitos reservados.</span>
+      <span data-store-cidade>Cidade</span>
+    </div>
+  </div>
+</footer>
+
+<a href="#" class="whatsapp-float" id="whatsFloat" data-wa-link aria-label="Falar no WhatsApp" target="_blank" rel="noopener">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2zm5.6 14.3c-.2.6-1.3 1.2-1.9 1.3-.5.1-1.1.1-1.8-.1-.4-.1-1-.3-1.6-.6-2.9-1.2-4.7-4.2-4.9-4.4-.1-.2-1.2-1.6-1.2-3 0-1.4.7-2.1 1-2.4.3-.3.6-.3.8-.3h.5c.2 0 .4 0 .6.5.2.5.7 1.8.8 1.9.1.1.1.3 0 .5-.1.2-.1.3-.3.5-.1.2-.3.4-.4.5-.1.1-.3.3-.1.6.2.3.9 1.5 1.9 2.4 1.3 1.2 2.4 1.5 2.7 1.7.3.2.5.1.6-.1.2-.2.7-.8.9-1.1.2-.3.4-.2.6-.1.2.1 1.5.7 1.8.8.3.1.5.2.5.3.1.2.1.6-.1 1.2z"/></svg>
+</a>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="js/store.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    const res = await fetch("data/config.json");
+    const cfg = await res.json();
+    document.getElementById("entregaPrazo").textContent = cfg.prazoEntrega;
+    document.getElementById("entregaFrete").textContent = `Frete grátis em pedidos acima de ${cfg.freteGratisAcima.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}.`;
+    document.getElementById("entregaPagamentos").innerHTML = cfg.pagamentos.map(p => `<span class="tag">${p}</span>`).join("");
+  });
+</script>
+</body>
+</html>
