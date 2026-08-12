@@ -205,14 +205,21 @@ const Store = (() => {
   }
 
   /* ---------------- rail "compre por categoria" ---------------- */
-  function renderCategoryRail(elId) {
-    const el = document.getElementById(elId);
-    if (!el) return;
+  function categoriaLinksHtml(linkClass) {
     const categorias = [...new Set(PRODUCTS.map(p => p.categoria))];
-    el.innerHTML = categorias.map(c => `
-      <a class="category-tile" href="colecao.html?categoria=${encodeURIComponent(c)}">
+    return categorias.map(c => `
+      <a class="${linkClass}" href="colecao.html?categoria=${encodeURIComponent(c)}">
         <span>${escapeHtml(CATEGORY_LABELS[c] || c)}</span>
       </a>`).join("");
+  }
+  function renderCategoryRail(elId) {
+    const el = document.getElementById(elId);
+    if (el) el.innerHTML = categoriaLinksHtml("category-tile");
+  }
+  /* dropdown do nav — aparece no hover em desktop, vira lista estática no drawer mobile */
+  function renderNavCategoryMenu() {
+    const el = document.getElementById("navCategoryMenu");
+    if (el) el.innerHTML = categoriaLinksHtml("");
   }
 
   /* ---------------- coleção: filtros ---------------- */
@@ -680,6 +687,7 @@ const Store = (() => {
   async function init() {
     await loadData();
     setGenericPageSeo();
+    renderNavCategoryMenu();
     initUiChrome();
     initHome();
     initHomeCustomizer();
