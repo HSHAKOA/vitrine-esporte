@@ -2,62 +2,50 @@
    VITRINE-ESPORTE — TOKENS
    Única fonte de cor/medida do template. Nenhuma outra folha
    de estilo deve declarar cores ou medidas fora destas variáveis.
-   O JS pode sobrescrever --accent* em runtime a partir de
-   data/config.json (campo corDestaque) para white-label.
+   Tema P&B editorial (referência: POC aprovado). O JS pode
+   sobrescrever --accent em runtime a partir de data/config.json
+   (campo corDestaque) para white-label — se corDestaque for
+   null/vazio, --accent permanece = --ink (P&B puro, default).
    ========================================================= */
 :root{
+  /* base P&B */
+  --paper:#FFFFFF;
+  --ink:#0A0A0A;
+  --fog:#F4F4F4;
+  --line:#E4E4E4;
+  --line-2:#D0D0D0;
+  --mute:#767676;
+
   /* cor de marca (fallback; store.js sobrescreve via corDestaque) */
-  --accent:#FF5A00;
-  --accent-2:#FF6A00;
-  --accent-dark:#D93E00;
-  --gradient: linear-gradient(135deg, var(--accent-2) 0%, var(--accent) 50%, var(--accent-dark) 100%);
+  --accent:var(--ink);
 
-  /* neutros */
-  --white:#FFFFFF;
-  --gray-light:#DADADA;
-  --gray-mid:#8A8F98;
-  --bg:#0A0C10;
-  --bg-secondary:#171A20;
-  --card:#20242B;
-  --line:#2D323B;
+  /* semântica (única exceção de cor fora da paleta P&B) */
+  --error:#C0392B;
+  --success:#2E7D46;
 
-  /* texto */
-  --text:#F5F6F7;
-  --text-muted:#A7ACB5;
-
-  /* semântica */
-  --success:#2FB86E;
-  --error:#E6483C;
-  --warning:#F0A93C;
-
-  /* foco / acessibilidade */
-  --focus-ring:#FFFFFF;
-  --focus-ring-offset:2px;
-
-  /* geometria */
-  --radius:12px;
-  --radius-card:16px;
-  --radius-sm:8px;
-  --gap:24px;
-  --maxw:1280px;
-  --section-space:96px;
-  --section-space-sm:56px;
-
-  /* sombra */
-  --shadow-card: 0 8px 24px rgba(0,0,0,.35);
-  --shadow-pop: 0 16px 48px rgba(0,0,0,.5);
+  /* tons de cinza usados só sobre fundo --ink (hero escuro, personalizador,
+     footer) — variações do próprio --ink, não cores novas */
+  --ink-mute:#8A8A8A;
+  --ink-line:#3A3A3A;
+  --ink-line-2:#262626;
+  --ink-surface:#141414;
 
   /* tipografia */
-  --font-body:'Inter', sans-serif;
-  --font-head:'Rajdhani', sans-serif;
+  --font-display:'Anton',sans-serif;
+  --font-body:'Archivo',sans-serif;
+  --font-util:'Space Mono',monospace;
+
+  /* geometria */
+  --gut:clamp(16px,4vw,48px);
+  --radius:0px;
+  --maxw:1440px;
 
   /* transições */
-  --ease: cubic-bezier(.4,0,.2,1);
-  --dur-fast: .15s;
-  --dur: .25s;
-  --dur-slow: .4s;
+  --dur-fast:.2s;
+  --dur:.35s;
+  --dur-slow:.45s;
 }
 
 @media (prefers-reduced-motion: reduce){
-  :root{ --dur-fast: 0s; --dur: 0s; --dur-slow: 0s; }
+  :root{ --dur-fast:0s; --dur:0s; --dur-slow:0s; }
 }

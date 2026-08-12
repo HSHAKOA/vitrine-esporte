@@ -4,10 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vitrine Esporte</title>
-<meta name="description" content="Loja de artigos esportivos.">
+<meta name="description" content="Camisas e artigos de treino, com personalização e checkout direto pelo WhatsApp.">
+<link rel="canonical" href="https://vitrineesporte.exemplo.com.br/index.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/tokens.css">
 <link rel="stylesheet" href="css/base.css">
 <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
@@ -16,145 +17,159 @@
 
 <a href="#main" class="skip-link">Pular para o conteúdo</a>
 
-<!-- ============ HEADER ============ -->
-<header class="header">
-  <div class="header-inner">
-    <a href="index.html" class="logo">
-      <img data-store-logo src="img/logo/logo-mark.png" alt="" class="logo-icon">
-      <span class="logo-text"><span class="logo-mark" data-store-name>Loja</span><span class="logo-sub">VITRINE</span></span>
+<!-- ============ NAV ============ -->
+<nav class="nav-fixed">
+  <div class="wrap nav-in">
+    <a href="index.html" class="wordmark">
+      <img data-store-logo src="" alt="" style="display:none">
+      <span data-store-wordmark>Loja</span>
+      <small data-store-tagline>Tagline</small>
     </a>
-    <nav class="nav" id="mainNav" aria-label="Navegação principal">
-      <a href="index.html" class="active">Início</a>
+    <div class="nav-links" id="mainNav">
       <a href="colecao.html">Coleção</a>
+      <a href="#personalizar">Personalizar</a>
+      <a href="#lookbook">Lookbook</a>
       <a href="entrega.html">Entrega</a>
       <a href="contato.html">Contato</a>
-    </nav>
-    <div class="header-actions">
-      <button class="icon-btn" id="cartBtn" aria-label="Abrir sacola de compras">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4"/><path d="M3 6h18"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-        <span class="cart-count" id="cartCount">0</span>
-      </button>
+    </div>
+    <div class="nav-right">
+      <button class="cart-btn" id="cartBtn" aria-label="Abrir sacola de compras">Sacola <span class="cart-count" id="cartCount">0</span></button>
       <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="mainNav">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
       </button>
     </div>
   </div>
-</header>
+</nav>
 <div class="nav-overlay" id="navOverlay"></div>
 
 <main id="main">
 
   <!-- ============ HERO ============ -->
-  <section class="hero">
-    <div class="hero-inner">
-      <div>
-        <span class="hero-eyebrow" data-store-tagline>A loja dos atletas da vida real</span>
-        <h1 class="hero-title">Equipamento de <em>alta performance</em> pra quem joga de verdade</h1>
-        <p class="hero-text" data-store-desc>Artigos esportivos profissionais. Monte seu pedido e finalize direto pelo WhatsApp.</p>
-        <div class="hero-actions">
-          <a href="colecao.html" class="btn btn-primary">Ver coleção</a>
-          <a href="#" class="btn btn-whatsapp" data-wa-link target="_blank" rel="noopener">Falar no WhatsApp</a>
+  <header class="hero">
+    <div class="hero-num" data-collection-num>01</div>
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <span class="marker">( Coleção ) <span data-collection-num>01</span> — <span data-collection-nome>Temporada 26</span></span>
+        <h1 class="h-display">Veste<br>quem<br><em>joga.</em></h1>
+        <p data-store-desc>Artigos esportivos profissionais. Monte seu pedido e finalize direto pelo WhatsApp.</p>
+        <div class="hero-cta">
+          <a href="colecao.html" class="btn">Ver a coleção</a>
+          <a href="#personalizar" class="btn btn-ghost">Montar a minha</a>
         </div>
       </div>
+      <div class="hero-stage">
+        <div class="hero-media">
+          <img src="img/categories/futebol.jpg" alt="" id="heroPoster">
+          <video id="heroVideo" src="video/hero-loop.mp4" muted autoplay loop playsinline preload="metadata" poster="img/categories/futebol.jpg" aria-hidden="true"></video>
+        </div>
+        <div class="hero-tags"><span>Entrega combinada por WhatsApp</span><span>Personalização em até 48h</span><span data-store-cidade>Cidade</span></div>
+      </div>
     </div>
-  </section>
+  </header>
+
+  <div class="marquee"><div class="marquee-track" id="mq"></div></div>
 
   <!-- ============ DESTAQUES ============ -->
-  <section class="section">
-    <div class="container">
-      <div class="section-head">
-        <span class="section-eyebrow">Selecionados pra você</span>
-        <h2 class="section-title">Produtos em destaque</h2>
-      </div>
-      <div class="grid grid-4" id="productsGrid"></div>
-      <div class="text-center" style="margin-top:32px">
-        <a href="colecao.html" class="btn btn-outline">Ver coleção completa</a>
-      </div>
+  <section class="section wrap" id="colecao">
+    <div class="sec-head rv">
+      <div><span class="marker">( Coleção ) 002</span><h2 class="h-display">Selecionados</h2></div>
+      <a href="colecao.html" class="btn btn-ghost">Ver coleção completa</a>
     </div>
+    <div class="grid rv" id="productsGrid"></div>
   </section>
 
-  <!-- ============ CATEGORIAS ============ -->
-  <section class="section" style="background:var(--bg-secondary)">
-    <div class="container">
-      <div class="section-head">
-        <span class="section-eyebrow">Explore por modalidade</span>
-        <h2 class="section-title">Categorias</h2>
-      </div>
-      <div class="grid grid-4">
-        <a class="info-card" href="colecao.html?categoria=futebol"><h3>Futebol</h3><p>Chuteiras, bolas e uniformes</p></a>
-        <a class="info-card" href="colecao.html?categoria=futsal"><h3>Futsal</h3><p>Tudo pra quadra</p></a>
-        <a class="info-card" href="colecao.html?categoria=society"><h3>Society</h3><p>Equipamento pra grama sintética</p></a>
-        <a class="info-card" href="colecao.html?categoria=jiujitsu"><h3>Jiu-Jitsu</h3><p>Kimonos, faixas e proteção</p></a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ FAQ ============ -->
-  <section class="section">
-    <div class="container">
-      <div class="section-head">
-        <span class="section-eyebrow">Dúvidas</span>
-        <h2 class="section-title">Perguntas frequentes</h2>
-      </div>
+  <!-- ============ PERSONALIZAR ============ -->
+  <section class="section custom" id="personalizar">
+    <div class="wrap custom-grid">
       <div>
-        <div class="faq-item">
-          <button class="faq-question">Como funciona a compra?<span class="plus">+</span></button>
-          <div class="faq-answer"><p>Você escolhe os produtos, adiciona à sacola e finaliza o pedido pelo WhatsApp. Lá confirmamos disponibilidade, pagamento e entrega.</p></div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-question">Quais formas de pagamento?<span class="plus">+</span></button>
-          <div class="faq-answer"><p>Combinamos direto pelo WhatsApp: Pix, cartão de crédito ou débito.</p></div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-question">Qual o prazo de entrega?<span class="plus">+</span></button>
-          <div class="faq-answer"><p>Veja os detalhes na página de <a href="entrega.html" style="color:var(--accent);text-decoration:underline">Entrega</a>.</p></div>
-        </div>
+        <span class="marker">( Personalização ) 003</span>
+        <h2 class="h-display">Seu nome<br>nas costas.</h2>
+        <p>Escreve aí e vê acontecer. Aplicação em vinil de recorte, resiste a lavagem em máquina.</p>
+        <div class="field"><label for="pzHomeNome">Nome</label><input id="pzHomeNome" maxlength="12" value="SILVA"></div>
+        <div class="field"><label for="pzHomeNumero">Número</label><input id="pzHomeNumero" maxlength="2" value="10" inputmode="numeric"></div>
+        <div class="field"><label>Tamanho</label><div class="size-row" id="pzHomeSizes"></div></div>
+        <button class="btn" id="pzHomeAddBtn" style="background:#fff;color:#0A0A0A;border-color:#fff">Adicionar — <span id="pzHomePrice">R$ 149,90</span></button>
       </div>
+      <div class="jersey-stage">
+        <svg viewBox="0 0 200 240" aria-label="Prévia da camisa personalizada">
+          <path d="M62 22 L82 13 Q100 30 118 13 L138 22 L176 48 L157 82 L142 72 L142 214 Q100 222 58 214 L58 72 L43 82 L24 48 Z" fill="#FFFFFF"/>
+          <path d="M82 13 Q100 30 118 13 L118 20 Q100 36 82 20 Z" fill="#0A0A0A" opacity=".12"/>
+          <text id="pzPreviewNome" x="100" y="72" text-anchor="middle" font-family="Anton" font-size="20" letter-spacing="2" fill="#0A0A0A">SILVA</text>
+          <text id="pzPreviewNumero" x="100" y="165" text-anchor="middle" font-family="Anton" font-size="88" fill="#0A0A0A">10</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ LOOKBOOK ============ -->
+  <section class="section wrap" id="lookbook">
+    <div class="sec-head rv"><div><span class="marker">( Lookbook ) 004</span><h2 class="h-display">Em campo</h2></div></div>
+    <div class="look rv">
+      <a class="look-cell look-a" href="colecao.html?categoria=futebol">
+        <img src="img/athletes/atleta-1.jpg" alt="Atleta em campo com uniforme de futebol">
+        <span class="look-cell-label">Futebol</span>
+      </a>
+      <div class="look-cell look-b look-txt">
+        <h3>Linha treino<br>26</h3>
+        <p>Malha leve, costura reforçada no ombro e caimento reto. Feita pra suar e voltar pro varal.</p>
+        <div style="margin-top:26px"><a class="btn btn-ghost" href="colecao.html">Ver linha</a></div>
+      </div>
+      <a class="look-cell look-c" href="colecao.html?categoria=futsal">
+        <img src="img/categories/futsal.jpg" alt="Categoria futsal">
+        <span class="look-cell-label">Futsal</span>
+      </a>
+      <a class="look-cell look-c" href="colecao.html?categoria=society">
+        <img src="img/categories/society.jpg" alt="Categoria society">
+        <span class="look-cell-label">Society</span>
+      </a>
+      <a class="look-cell look-c" href="colecao.html?categoria=jiujitsu">
+        <img src="img/categories/jiujitsu.jpg" alt="Categoria jiu-jitsu">
+        <span class="look-cell-label">Jiu-Jitsu</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============ COMO FUNCIONA ============ -->
+  <section id="garantias">
+    <div class="wrap" style="padding-bottom:38px"><span class="marker">( Como funciona ) 005</span></div>
+    <div class="trust rv">
+      <div class="trust-item"><div class="n">01</div><h4>Escolhe e personaliza</h4><p>Nome, número e tamanho na hora do pedido, sem precisar mandar mensagem antes.</p></div>
+      <div class="trust-item"><div class="n">02</div><h4>Confirma no WhatsApp</h4><p>A sacola vira mensagem pronta. Você só aperta enviar e a loja responde.</p></div>
+      <div class="trust-item"><div class="n">03</div><h4>Combina pagamento</h4><p>Pix, cartão de crédito ou débito — combinado direto com a loja pelo WhatsApp.</p></div>
+      <div class="trust-item"><div class="n">04</div><h4>Recebe rápido</h4><p>Envio em até 2 dias úteis após a confirmação do pedido.</p></div>
     </div>
   </section>
 
 </main>
 
-<!-- ============ SACOLA ============ -->
-<aside class="cart-drawer" id="cartDrawer" aria-label="Sacola de compras">
-  <div class="cart-head"><h3>Sua sacola</h3><button class="modal-close" id="closeCart" aria-label="Fechar sacola">✕</button></div>
-  <div class="cart-items" id="cartItems"></div>
-  <div class="cart-foot">
-    <p id="cartFreteMsg" class="cart-note"></p>
-    <div class="cart-total-row"><span>Subtotal</span><span id="cartSubtotal">R$ 0,00</span></div>
-    <button class="btn btn-whatsapp btn-block" id="checkoutBtn">Finalizar pelo WhatsApp</button>
-    <p class="cart-note">*Valores finais, formas de pagamento e frete serão confirmados diretamente pelo WhatsApp.</p>
-  </div>
-</aside>
-<div class="nav-overlay" id="cartOverlay"></div>
-
 <!-- ============ FOOTER ============ -->
-<footer class="footer">
-  <div class="container">
-    <div class="footer-grid">
-      <div class="footer-col">
-        <h4 data-store-name>Loja</h4>
-        <p data-store-tagline>Tagline</p>
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-top">
+      <div>
+        <h2>Bora<br>vestir?</h2>
+        <div style="margin-top:28px"><a href="#" data-wa-link target="_blank" rel="noopener" class="btn" style="background:#fff;color:#0A0A0A;border-color:#fff">Chamar no WhatsApp</a></div>
       </div>
-      <div class="footer-col">
-        <h4>Navegação</h4>
-        <a href="index.html">Início</a>
-        <a href="colecao.html">Coleção</a>
-        <a href="entrega.html">Entrega</a>
-        <a href="contato.html">Contato</a>
-      </div>
-      <div class="footer-col">
-        <h4>Fale conosco</h4>
-        <a data-wa-link href="#" target="_blank" rel="noopener">WhatsApp</a>
-        <a data-ig-link href="#" target="_blank" rel="noopener">Instagram</a>
-      </div>
+      <div class="foot-col"><h5>Loja</h5><a href="colecao.html?categoria=futebol">Futebol</a><a href="colecao.html?categoria=futsal">Futsal</a><a href="colecao.html?categoria=jiujitsu">Jiu-Jitsu</a><a href="#personalizar">Personalizar</a></div>
+      <div class="foot-col"><h5>Ajuda</h5><a href="entrega.html">Entrega e pagamento</a><a href="contato.html">Contato</a><a href="colecao.html">Ver coleção</a></div>
+      <div class="foot-col"><h5>Contato</h5><a href="#" data-wa-link target="_blank" rel="noopener">WhatsApp</a><a href="#" data-ig-link target="_blank" rel="noopener">Instagram</a><p data-store-cidade>Cidade</p></div>
     </div>
-    <div class="footer-bottom">
-      <span>© <span id="year"></span> <span data-store-name>Loja</span>. Todos os direitos reservados.</span>
-      <span data-store-cidade>Cidade</span>
-    </div>
+    <div class="foot-bot"><span>© <span id="year"></span> <span data-store-name>Loja</span></span><span>Site por NADA Studio · do nada nasce tudo</span></div>
   </div>
 </footer>
+
+<!-- ============ SACOLA ============ -->
+<div class="scrim" id="cartOverlay"></div>
+<aside class="drawer" id="cartDrawer" aria-label="Sacola de compras">
+  <div class="drawer-head"><strong>Sua sacola</strong><button class="modal-close" id="closeCart" aria-label="Fechar sacola">×</button></div>
+  <div class="drawer-body" id="cartItems"></div>
+  <div class="drawer-foot">
+    <p id="cartFreteMsg" class="drawer-note"></p>
+    <div class="drawer-total"><span>Total</span><span id="cartSubtotal">R$ 0,00</span></div>
+    <button class="btn" id="checkoutBtn">Finalizar pelo WhatsApp</button>
+    <p class="drawer-note">*Valores finais, formas de pagamento e frete serão confirmados diretamente pelo WhatsApp.</p>
+  </div>
+</aside>
 
 <a href="#" class="whatsapp-float" id="whatsFloat" data-wa-link aria-label="Falar no WhatsApp" target="_blank" rel="noopener">
   <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2zm5.6 14.3c-.2.6-1.3 1.2-1.9 1.3-.5.1-1.1.1-1.8-.1-.4-.1-1-.3-1.6-.6-2.9-1.2-4.7-4.2-4.9-4.4-.1-.2-1.2-1.6-1.2-3 0-1.4.7-2.1 1-2.4.3-.3.6-.3.8-.3h.5c.2 0 .4 0 .6.5.2.5.7 1.8.8 1.9.1.1.1.3 0 .5-.1.2-.1.3-.3.5-.1.2-.3.4-.4.5-.1.1-.3.3-.1.6.2.3.9 1.5 1.9 2.4 1.3 1.2 2.4 1.5 2.7 1.7.3.2.5.1.6-.1.2-.2.7-.8.9-1.1.2-.3.4-.2.6-.1.2.1 1.5.7 1.8.8.3.1.5.2.5.3.1.2.1.6-.1 1.2z"/></svg>
@@ -162,6 +177,17 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<script>
+  document.getElementById("mq").innerHTML = Array(4).fill([
+    "Frete combinado por WhatsApp","Personalização em até 48h","Pix, crédito ou débito","Checkout direto no WhatsApp"
+  ]).flat().map(m => `<span>${m} ·</span>`).join("");
+  /* respeita prefers-reduced-motion: sem autoplay de vídeo, só o poster */
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    document.getElementById("heroVideo")?.remove();
+  } else {
+    document.getElementById("heroVideo")?.addEventListener("error", function () { this.remove(); });
+  }
+</script>
 <script src="js/store.js"></script>
 </body>
 </html>

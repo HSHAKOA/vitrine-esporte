@@ -1,7 +1,8 @@
 /* =========================================================
    VITRINE-ESPORTE — STORE.JS
-   Catálogo, filtros, sacola, personalizador, checkout WhatsApp,
-   SEO (meta + JSON-LD) e utilidades de UI. Zero dependências.
+   Catálogo, filtros, sacola, personalizador (PDP + genérico da
+   home com preview ao vivo), checkout WhatsApp, SEO (meta +
+   JSON-LD) e utilidades de UI. Zero dependências.
    Espera data/config.json e data/produtos.json no mesmo domínio.
    ========================================================= */
 
@@ -22,6 +23,11 @@ const Store = (() => {
   function escapeHtml(str) {
     return String(str).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   }
+  /* item da sacola pode referenciar um produto real (por sku) ou
+     carregar seu próprio "produto" embutido (personalização genérica) */
+  function getLineProduct(item) {
+    return item.custom ? item.produtoCustom : findProduct(item.sku);
+  }
 
   const CATEGORY_LABELS = {
     futebol: "Futebol", futsal: "Futsal", society: "Society",
@@ -30,13 +36,15 @@ const Store = (() => {
 
   /* ícone-rascunho genérico usado quando a foto do produto não existe */
   function placeholderSvg() {
-    return `<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    return `<svg class="placeholder-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <circle cx="24" cy="24" r="18"/><path d="M24 12l7 5-3 8h-8l-3-8zM24 30v6M17 25l-9-1M31 25l9-1"/>
     </svg>`;
   }
-  function mediaMarkup(imagens) {
+  /* imagem real (se existir) sobre o ícone-rascunho — usado em locais
+     sem o efeito "número gigante" (sacola, galeria da PDP) */
+  function mediaMarkup(imagens, alt) {
     const src = imagens && imagens[0];
-    return `${src ? `<img src="${src}" alt="" loading="lazy" onerror="this.style.display='none'">` : ""}${placeholderSvg()}`;
+    return `${src ? `<img src="${src}" alt="${escapeHtml(alt || "")}" loading="lazy" onerror="this.style.display='none'">` : ""}${placeholderSvg()}`;
   }
 
   /* ---------------- carga de dados ---------------- */
@@ -57,8 +65,17 @@ const Store = (() => {
     }
     document.querySelectorAll("[data-store-name]").forEach(el => el.textContent = CONFIG.nome);
     document.querySelectorAll("[data-store-tagline]").forEach(el => el.textContent = CONFIG.tagline);
+    document.querySelectorAll("[data-store-desc]").forEach(el => el.textContent = CONFIG.descricao);
     document.querySelectorAll("[data-store-cidade]").forEach(el => el.textContent = CONFIG.cidade);
-    document.querySelectorAll("[data-store-logo]").forEach(el => el.src = CONFIG.logo);
+    document.querySelectorAll("[data-store-logo]").forEach(el => {
+      if (CONFIG.logo) { el.src = CONFIG.logo; el.style.display = ""; }
+      else { el.style.display = "none"; }
+    });
+    document.querySelectorAll("[data-store-wordmark]").forEach(el => {
+      if (!CONFIG.logo) el.textContent = CONFIG.nome;
+    });
+    document.querySelectorAll("[data-collection-num]").forEach(el => el.textContent = (CONFIG.colecao && CONFIG.colecao.numero) || "01");
+    document.querySelectorAll("[data-collection-nome]").forEach(el => el.textContent = (CONFIG.colecao && CONFIG.colecao.nome) || "");
 
     const waGeneric = waLink(CONFIG.greeting);
     document.querySelectorAll("[data-wa-link]").forEach(el => el.href = waGeneric);
@@ -136,25 +153,50 @@ const Store = (() => {
       },
     });
   }
+  /* bug corrigido: setPageSeo/setMeta antes só rodava na PDP.
+     Agora roda em toda página (a PDP segue setando a sua via setProductSeo). */
+  function setGenericPageSeo() {
+    const page = document.body.dataset.page;
+    if (page === "produto") return;
+    const titles = {
+      home: CONFIG.nome,
+      colecao: `Coleção | ${CONFIG.nome}`,
+      entrega: `Entrega e pagamento | ${CONFIG.nome}`,
+      contato: `Contato | ${CONFIG.nome}`,
+    };
+    const descs = {
+      home: CONFIG.descricao,
+      colecao: `Catálogo completo de produtos da ${CONFIG.nome}.`,
+      entrega: CONFIG.prazoEntrega,
+      contato: `Fale com a ${CONFIG.nome} pelo WhatsApp ou Instagram.`,
+    };
+    setPageSeo({ title: titles[page] || CONFIG.nome, description: descs[page] || CONFIG.descricao });
+  }
 
   /* ---------------- catálogo / render ---------------- */
-  function productCardHtml(p) {
+  function productCardHtml(p, i) {
     const promo = p.precoPromo != null;
+    const num = String(i + 1).padStart(2, "0");
+    const src = p.imagens && p.imagens[0];
+    const href = `produto.html?p=${encodeURIComponent(p.slug)}`;
     return `
-      <div class="product-card" data-sku="${p.sku}">
-        ${promo ? `<span class="product-badge">OFERTA</span>` : ""}
-        <a class="product-link" href="produto.html?p=${encodeURIComponent(p.slug)}">
-          <div class="product-image">${mediaMarkup(p.imagens)}</div>
-          <div class="product-info">
-            <span class="product-cat">${CATEGORY_LABELS[p.categoria] || p.categoria}</span>
-            <span class="product-name">${escapeHtml(p.nome)}</span>
-            <div class="product-price-row">
-              ${promo ? `<div class="product-price-old">${currency(p.preco)}</div>` : ""}
-              <div class="product-price">${currency(precoFinal(p))}</div>
+      <article class="card" data-sku="${p.sku}">
+        <div class="card-media">
+          ${promo ? `<span class="card-flag">Oferta</span>` : ""}
+          <div class="card-num">${num}</div>
+          <a href="${href}">${src ? `<img src="${src}" alt="${escapeHtml(p.nome)}" loading="lazy" onerror="this.remove()">` : placeholderSvg()}</a>
+          <button type="button" class="card-quick" data-sku="${p.sku}">Adicionar à sacola</button>
+        </div>
+        <a href="${href}" class="card-info-link">
+          <div class="card-info">
+            <h3>${escapeHtml(p.nome)}</h3>
+            <div class="card-meta">
+              <span class="card-price">${promo ? `<span class="card-price-old">${currency(p.preco)}</span>` : ""}${currency(precoFinal(p))}</span>
+              <span class="card-sizes">${(p.tamanhos || []).join(" · ")}</span>
             </div>
           </div>
         </a>
-      </div>`;
+      </article>`;
   }
 
   function renderGrid(elId, list) {
@@ -164,7 +206,15 @@ const Store = (() => {
       grid.innerHTML = `<p class="filters-empty">Nenhum produto encontrado.</p>`;
       return;
     }
-    grid.innerHTML = list.map(productCardHtml).join("");
+    grid.innerHTML = list.map((p, i) => productCardHtml(p, i)).join("");
+    grid.querySelectorAll(".card-quick").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        addToCart({ sku: btn.dataset.sku, qty: 1, tamanho: null, personalizacao: null });
+        showToast("Adicionado à sacola ✓");
+      });
+    });
   }
 
   /* ---------------- coleção: filtros ---------------- */
@@ -180,16 +230,19 @@ const Store = (() => {
     let activeCategory = qs("categoria") || "todos";
 
     function chipHtml(value, label) {
-      return `<button class="filter-chip" data-value="${value}" aria-pressed="${activeCategory === value}">${label}</button>`;
+      return `<button class="chip${activeCategory === value ? " on" : ""}" data-value="${value}" aria-pressed="${activeCategory === value}">${label}</button>`;
     }
     if (chipsEl) {
       chipsEl.innerHTML = [chipHtml("todos", "Todos")]
         .concat(categorias.map(c => chipHtml(c, CATEGORY_LABELS[c] || c)))
         .join("");
-      chipsEl.querySelectorAll(".filter-chip").forEach(btn => {
+      chipsEl.querySelectorAll(".chip").forEach(btn => {
         btn.addEventListener("click", () => {
           activeCategory = btn.dataset.value;
-          chipsEl.querySelectorAll(".filter-chip").forEach(b => b.setAttribute("aria-pressed", String(b === btn)));
+          chipsEl.querySelectorAll(".chip").forEach(b => {
+            b.classList.toggle("on", b === btn);
+            b.setAttribute("aria-pressed", String(b === btn));
+          });
           applyFilters();
         });
       });
@@ -210,9 +263,61 @@ const Store = (() => {
   }
 
   function initHome() {
+    if (document.body.dataset.page !== "home") return;
     const grid = document.getElementById("productsGrid");
-    if (!grid || document.body.dataset.page !== "home") return;
-    renderGrid("productsGrid", PRODUCTS.filter(p => p.destaque));
+    if (grid) renderGrid("productsGrid", PRODUCTS.filter(p => p.destaque));
+  }
+
+  /* ---------------- personalizador genérico (home) ----------------
+     Bloco "monte sua camisa" fora do catálogo, com preview SVG ao
+     vivo. Vira um item de linha customizado na MESMA sacola/checkout
+     usados pelo resto do site (addToCart / buildWhatsappMessage). */
+  function initHomeCustomizer() {
+    if (document.body.dataset.page !== "home") return;
+    const nomeEl = document.getElementById("pzHomeNome");
+    const numEl = document.getElementById("pzHomeNumero");
+    const sizesEl = document.getElementById("pzHomeSizes");
+    const previewNome = document.getElementById("pzPreviewNome");
+    const previewNumero = document.getElementById("pzPreviewNumero");
+    const priceEl = document.getElementById("pzHomePrice");
+    const addBtn = document.getElementById("pzHomeAddBtn");
+    if (!nomeEl || !sizesEl) return;
+
+    const preco = CONFIG.precoPersonalizacao;
+    if (priceEl) priceEl.textContent = currency(preco);
+
+    let selectedSize = "M";
+    const sizes = ["PP", "P", "M", "G", "GG", "XG"];
+    sizesEl.innerHTML = sizes.map(s => `<button type="button" class="size${s === selectedSize ? " on" : ""}" data-size="${s}">${s}</button>`).join("");
+    sizesEl.querySelectorAll(".size").forEach(btn => {
+      btn.addEventListener("click", () => {
+        selectedSize = btn.dataset.size;
+        sizesEl.querySelectorAll(".size").forEach(b => b.classList.toggle("on", b === btn));
+      });
+    });
+
+    function pinta() {
+      if (previewNome) previewNome.textContent = (nomeEl.value || "").toUpperCase();
+      if (previewNumero) previewNumero.textContent = numEl.value || "";
+    }
+    nomeEl.addEventListener("input", pinta);
+    numEl?.addEventListener("input", pinta);
+    pinta();
+
+    addBtn?.addEventListener("click", () => {
+      const nome = (nomeEl.value || "").trim();
+      const numero = (numEl?.value || "").trim();
+      const line = {
+        sku: "CUSTOM-JERSEY",
+        qty: 1,
+        tamanho: selectedSize,
+        personalizacao: { nome, numero },
+        custom: true,
+        produtoCustom: { nome: "Camisa Personalizada", preco, precoPromo: null, sku: "CUSTOM-JERSEY", imagens: [] },
+      };
+      addToCart(line);
+      showToast("Adicionado à sacola ✓");
+    });
   }
 
   /* ---------------- PDP ---------------- */
@@ -260,7 +365,7 @@ const Store = (() => {
         : placeholderSvg();
       thumbsEl.innerHTML = imgs.map((img, i) => `
         <button class="pdp-thumb" data-i="${i}" aria-current="${i === currentImage}" aria-label="Ver imagem ${i + 1} de ${p.nome}">
-          ${img ? `<img src="${img}" alt="" onerror="this.style.display='none'">` : ""}
+          ${img ? `<img src="${img}" alt="${escapeHtml(p.nome)} — imagem ${i + 1}" onerror="this.style.display='none'">` : ""}
         </button>`).join("");
       thumbsEl.querySelectorAll(".pdp-thumb").forEach(btn => {
         btn.addEventListener("click", () => { currentImage = Number(btn.dataset.i); renderGallery(); });
@@ -285,6 +390,9 @@ const Store = (() => {
     }
     renderSizes();
 
+    /* nota: produtos reais têm fotos (não vetores), então este
+       personalizador NÃO tem preview ao vivo — só os campos de
+       nome/número, diferente do bloco genérico da home. */
     if (p.personalizavel) {
       personalizeEl.style.display = "";
       personalizeEl.innerHTML = `
@@ -363,7 +471,7 @@ const Store = (() => {
   }
   function cartSubtotal() {
     return cart.reduce((sum, item) => {
-      const p = findProduct(item.sku);
+      const p = getLineProduct(item);
       return sum + (p ? precoFinal(p) * item.qty : 0);
     }, 0);
   }
@@ -398,27 +506,27 @@ const Store = (() => {
 
     if (!container) return;
     if (!cart.length) {
-      container.innerHTML = `<p class="cart-empty">Sua sacola está vazia.</p>`;
+      container.innerHTML = `<p class="drawer-empty">Sacola vazia. Bora escolher.</p>`;
       return;
     }
     container.innerHTML = cart.map((item, idx) => {
-      const p = findProduct(item.sku);
+      const p = getLineProduct(item);
       if (!p) return "";
       const meta = cartItemMeta(item);
       return `
-        <div class="cart-item">
-          <div class="cart-item-thumb">${mediaMarkup(p.imagens)}</div>
-          <div class="cart-item-info">
-            <span class="cart-item-name">${escapeHtml(p.nome)}</span>
-            ${meta ? `<span class="cart-item-meta">${escapeHtml(meta)}</span>` : ""}
-            <span class="cart-item-price">${currency(precoFinal(p))}</span>
-            <div class="cart-item-qty">
+        <div class="ci">
+          <div class="ci-thumb">${mediaMarkup(p.imagens, p.nome)}</div>
+          <div class="ci-info">
+            <h4>${escapeHtml(p.nome)}</h4>
+            ${meta ? `<span>${escapeHtml(meta)}</span>` : ""}
+            <span>${currency(precoFinal(p))}</span>
+            <div class="ci-qty">
               <button class="qty-btn" data-action="dec" data-idx="${idx}" aria-label="Diminuir quantidade">−</button>
               <span>${item.qty}</span>
               <button class="qty-btn" data-action="inc" data-idx="${idx}" aria-label="Aumentar quantidade">+</button>
             </div>
           </div>
-          <button class="cart-item-remove" data-action="remove" data-idx="${idx}">Remover</button>
+          <button class="ci-remove" data-action="remove" data-idx="${idx}">Remover</button>
         </div>`;
     }).join("");
 
@@ -437,7 +545,7 @@ const Store = (() => {
   function buildWhatsappMessage() {
     const lines = [CONFIG.greeting, ""];
     cart.forEach(item => {
-      const p = findProduct(item.sku);
+      const p = getLineProduct(item);
       if (!p) return;
       const meta = cartItemMeta(item);
       lines.push(`• ${item.qty}x ${p.nome}${meta ? ` (${meta})` : ""} — ${currency(precoFinal(p))} un.`);
@@ -518,26 +626,29 @@ const Store = (() => {
     });
   }
 
+  /* equivalente ao .rv/.rv.in do POC (substitui [data-reveal]/.in-view) */
   let revealObserver;
   function observeReveal() {
     if (!revealObserver) {
       revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("in-view");
+            entry.target.classList.add("in");
             revealObserver.unobserve(entry.target);
           }
         });
-      }, { threshold: 0.15 });
+      }, { threshold: 0.12 });
     }
-    document.querySelectorAll("[data-reveal]:not(.in-view)").forEach(el => revealObserver.observe(el));
+    document.querySelectorAll(".rv:not(.in)").forEach(el => revealObserver.observe(el));
   }
 
   /* ---------------- init ---------------- */
   async function init() {
     await loadData();
+    setGenericPageSeo();
     initUiChrome();
     initHome();
+    initHomeCustomizer();
     initCollection();
     initPdp();
     renderCart();

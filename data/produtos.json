@@ -9,7 +9,7 @@
     "tamanhos": ["37", "38", "39", "40", "41", "42", "43", "44"],
     "tamanhosIndisponiveis": ["38"],
     "personalizavel": false,
-    "imagens": ["img/products/chuteira-campo.jpg", "img/products/chuteira_campo_profissional_05.jpg"],
+    "imagens": ["img/products/chuteira_campo_profissional_05.jpg"],
     "descricao": "Chuteira de campo profissional, cabedal sintético resistente e travas de borracha para tração em gramado natural. Ideal para quem joga com regularidade e exige durabilidade.",
     "destaque": true
   },
@@ -219,7 +219,7 @@
     "tamanhos": ["A1", "A2", "A3", "A4"],
     "tamanhosIndisponiveis": [],
     "personalizavel": false,
-    "imagens": ["img/products/faixa-jj.jpg"],
+    "imagens": [],
     "descricao": "Faixa oficial de algodão reforçado, costura dupla e cores fiéis à graduação.",
     "destaque": false
   },
@@ -233,7 +233,7 @@
     "tamanhos": ["P", "M", "G", "GG"],
     "tamanhosIndisponiveis": [],
     "personalizavel": false,
-    "imagens": ["img/products/rashguard.jpg"],
+    "imagens": [],
     "descricao": "Rash guard de manga longa em tecido de compressão, proteção contra atrito durante o treino.",
     "destaque": false
   },
@@ -247,7 +247,7 @@
     "tamanhos": ["Único"],
     "tamanhosIndisponiveis": [],
     "personalizavel": false,
-    "imagens": ["img/products/protetor-bucal.jpg"],
+    "imagens": [],
     "descricao": "Protetor bucal duplo, moldável em água quente para um encaixe personalizado.",
     "destaque": false
   },
