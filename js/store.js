@@ -56,9 +56,15 @@ const Store = (() => {
     jiujitsu: "Jiu-Jitsu", acessorios: "Acessórios",
   };
 
-  /* Site sem fotografia: onde o sistema Nike pediria uma foto (card de
-     produto, sacola, PDP), o bloco de mídia fica --color-soft-cloud
-     vazio — sem ícone, sem SVG, sem inicial do nome. É deliberado. */
+  /* Foto de produto é opcional: se `imagens[0]` existir, a mídia (card,
+     sacola, PDP) recebe uma <img> real; se não existir OU o arquivo falhar
+     ao carregar, o bloco --color-soft-cloud (ou --color-ink no
+     campaign-tile) permanece vazio, sem quebrar o layout. */
+  function mediaMarkup(imagens, alt) {
+    const src = imagens && imagens[0];
+    if (!src) return "";
+    return `<img src="${escapeHtml(src)}" alt="${escapeHtml(alt || "")}" loading="lazy" onerror="this.remove()">`;
+  }
 
   /* ---------------- carga de dados ---------------- */
   async function loadData() {
@@ -72,13 +78,26 @@ const Store = (() => {
     return { CONFIG, PRODUCTS };
   }
 
+  /* contraste automático: decide texto preto ou branco sobre a cor de marca,
+     pra corDestaque não depender do lojista acertar um tom escuro o bastante */
+  function contrastColor(hex) {
+    const m = /^#?([0-9a-f]{6})$/i.exec(hex || "");
+    if (!m) return "#ffffff";
+    const n = parseInt(m[1], 16);
+    const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+    const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+    return yiq >= 140 ? "#111111" : "#ffffff";
+  }
+
   function applyBranding() {
     if (CONFIG.corDestaque) {
-      document.documentElement.style.setProperty("--accent", CONFIG.corDestaque);
+      document.documentElement.style.setProperty("--color-accent", CONFIG.corDestaque);
+      document.documentElement.style.setProperty("--color-on-accent", contrastColor(CONFIG.corDestaque));
     }
     document.querySelectorAll("[data-store-name]").forEach(el => el.textContent = CONFIG.nome);
     document.querySelectorAll("[data-store-tagline]").forEach(el => el.textContent = CONFIG.tagline);
     document.querySelectorAll("[data-store-desc]").forEach(el => el.textContent = CONFIG.descricao);
+    document.querySelectorAll("[data-store-sobre]").forEach(el => el.textContent = CONFIG.sobre || CONFIG.descricao);
     document.querySelectorAll("[data-store-cidade]").forEach(el => el.textContent = CONFIG.cidade);
     document.querySelectorAll("[data-store-logo]").forEach(el => {
       if (CONFIG.logo) { el.src = CONFIG.logo; el.style.display = ""; }
@@ -145,17 +164,20 @@ const Store = (() => {
     if (image) setMeta("og:image", image, "property");
   }
   function setProductSeo(p) {
+    const image = p.imagens && p.imagens[0];
     setPageSeo({
       title: `${p.nome} | ${CONFIG.nome}`,
       description: p.descricao,
+      image,
     });
-    /* sem campo "image": produto sem foto é válido no schema.org Product */
+    /* sem "image": produto sem foto cadastrada é válido no schema.org Product */
     injectJsonLd("ld-product", {
       "@context": "https://schema.org",
       "@type": "Product",
       "sku": p.sku,
       "name": p.nome,
       "description": p.descricao,
+      ...(image ? { image } : {}),
       "offers": {
         "@type": "Offer",
         "priceCurrency": "BRL",
@@ -213,28 +235,31 @@ const Store = (() => {
   }
 
   /* ---------------- catálogo / render ---------------- */
-  /* product-card do sistema Nike: mídia = bloco --color-soft-cloud vazio
-     (sem foto, sem ícone), metadados abaixo com spacing.sm entre linhas. */
+  /* product-card: mídia mostra a foto (imagens[0]) quando existir, sem
+     nenhum ícone sobreposto — sem foto, fica o bloco --color-soft-cloud
+     vazio. Favoritar fica como botão de verdade ao lado do texto (não
+     flutuando sobre a imagem); "Oferta" vira uma tag inline junto do
+     preço. Card inteiro leva pra PDP; não existe mais "adicionar rápido"
+     aqui — quem tem tamanho/personalização precisa passar pela PDP. */
   function productCardHtml(p) {
     const promo = p.precoPromo != null;
     const href = `produto.html?p=${encodeURIComponent(p.slug)}`;
     return `
-      <article class="product-card" data-sku="${p.sku}">
+      <article class="product-card">
         <a href="${href}" class="product-card-media" aria-label="${escapeHtml(p.nome)}">
-          ${promo ? `<span class="badge-promo">Oferta</span>` : ""}
+          ${mediaMarkup(p.imagens, p.nome)}
+        </a>
+        <div class="product-card-body">
+          <a href="${href}" class="product-card-link">
+            <span class="product-card-name">${escapeHtml(p.nome)}</span>
+            <span class="product-card-cat">${escapeHtml(CATEGORY_LABELS[p.categoria] || p.categoria)}</span>
+            <span class="product-card-price">
+              ${promo ? `<span class="old">${currency(p.preco)}</span><span class="sale">${currency(precoFinal(p))}</span><span class="tag">Oferta</span>` : currency(precoFinal(p))}
+            </span>
+            <span class="product-card-installments">${installmentsText(precoFinal(p))}</span>
+          </a>
           ${favoriteBtnHtml(p.sku)}
-          <span class="product-card-quick">
-            <button type="button" class="btn-icon-circular" data-sku="${p.sku}" aria-label="Adicionar ${escapeHtml(p.nome)} à sacola" title="Adicionar à sacola">+</button>
-          </span>
-        </a>
-        <a href="${href}" class="product-card-body">
-          <span class="product-card-name">${escapeHtml(p.nome)}</span>
-          <span class="product-card-cat">${escapeHtml(CATEGORY_LABELS[p.categoria] || p.categoria)}</span>
-          <span class="product-card-price">
-            ${promo ? `<span class="old">${currency(p.preco)}</span><span class="sale">${currency(precoFinal(p))}</span>` : currency(precoFinal(p))}
-          </span>
-          <span class="product-card-installments">${installmentsText(precoFinal(p))}</span>
-        </a>
+        </div>
       </article>`;
   }
 
@@ -249,17 +274,9 @@ const Store = (() => {
     wireProductCardButtons(grid);
   }
 
-  /* botões repetidos em qualquer grid de product-card (grade principal,
-     relacionados da PDP): adicionar à sacola (quick-add) e favoritar. */
+  /* botão de favoritar, repetido em qualquer grid de product-card (grade
+     principal, relacionados da PDP). */
   function wireProductCardButtons(container) {
-    container.querySelectorAll("[data-sku]").forEach(btn => {
-      btn.addEventListener("click", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        addToCart({ sku: btn.dataset.sku, qty: 1, tamanho: null, personalizacao: null });
-        showToast("Adicionado à sacola ✓");
-      });
-    });
     container.querySelectorAll("[data-fav]").forEach(btn => {
       btn.addEventListener("click", (e) => {
         e.preventDefault();
@@ -499,7 +516,7 @@ const Store = (() => {
         produtoCustom: { nome: "Camisa Personalizada", preco, precoPromo: null, sku: "CUSTOM-JERSEY", imagens: [] },
       };
       addToCart(line);
-      showToast("Adicionado à sacola ✓");
+      openCart();
     });
   }
 
@@ -523,6 +540,8 @@ const Store = (() => {
     const addBtn = document.getElementById("pdpAddBtn");
     const buyBtn = document.getElementById("pdpBuyBtn");
     const sizeError = document.getElementById("pdpSizeError");
+
+    document.getElementById("pdpMainImage").innerHTML = mediaMarkup(p.imagens, p.nome);
 
     const catLabel = CATEGORY_LABELS[p.categoria] || p.categoria;
     document.getElementById("pdpCat").textContent = catLabel;
@@ -631,7 +650,7 @@ const Store = (() => {
       const line = buildLine();
       if (!line) return;
       addToCart(line);
-      showToast("Adicionado à sacola ✓");
+      openCart();
     });
     buyBtn.addEventListener("click", () => {
       const line = buildLine();
@@ -652,7 +671,7 @@ const Store = (() => {
         const line = buildLine();
         if (!line) return;
         addToCart(line);
-        showToast("Adicionado à sacola ✓");
+        openCart();
       });
       const stickyObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => stickyBar.classList.toggle("show", !entry.isIntersecting));
@@ -749,7 +768,7 @@ const Store = (() => {
       const meta = cartItemMeta(item);
       return `
         <div class="ci">
-          <span class="ci-thumb" aria-hidden="true"></span>
+          <span class="ci-thumb" aria-hidden="true">${mediaMarkup(p.imagens, p.nome)}</span>
           <div class="ci-info">
             <h4>${escapeHtml(p.nome)}</h4>
             ${meta ? `<span>${escapeHtml(meta)}</span>` : ""}

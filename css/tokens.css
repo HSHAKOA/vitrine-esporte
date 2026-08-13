@@ -1,16 +1,19 @@
 /* =========================================================
    VITRINE-ESPORTE — TOKENS
-   Única fonte de cor/medida/tipografia do template. Sistema fixo
-   "Nike" (spec de produto real) — P&B + acentos semânticos fixos.
+   Única fonte de cor/medida/tipografia do template. Base P&B
+   (estilo "Nike", spec de produto real) + acentos semânticos fixos.
    Nenhuma outra folha de estilo deve declarar cor, raio ou
    espaçamento fora destas variáveis.
-   IMPORTANTE: nesta versão o template NÃO aceita cor de marca
-   customizável (ver COMO-EDITAR.md) — a chave `corDestaque` do
-   config.json é mantida só por compatibilidade e é ignorada.
+   Cor de marca: --color-accent/--color-on-accent controlam os
+   pontos de destaque do site (CTA, hero, chips ativos, badges).
+   Por padrão valem preto/branco (idêntico ao ink), mas a chave
+   `corDestaque` do config.json sobrescreve as duas em runtime via
+   js/store.js — ver COMO-EDITAR.md, seção 5.
    ========================================================= */
 :root{
   /* ---- cores ---- */
-  --color-primary:#111111;         /* = ink */
+  --color-accent:#111111;          /* sobrescrito em runtime por corDestaque */
+  --color-on-accent:#ffffff;       /* texto sobre --color-accent (contraste automático) */
   --color-on-primary:#ffffff;
   --color-canvas:#ffffff;
   --color-soft-cloud:#f5f5f5;

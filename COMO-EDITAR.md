@@ -1,10 +1,12 @@
 # vitrine-esporte — como editar
 
-Template de e-commerce esportivo reutilizável. Design system fixo estilo
-"Nike" (P&B + acentos semânticos fixos), **sem fotografia** — onde o
-sistema de referência usaria foto de produto, o site mostra um bloco
-chapado vazio (cor `soft-cloud`, ou `ink` no destaque da home). Sem
-framework, sem build — HTML puro + CSS + JS, dados em JSON.
+Template de e-commerce esportivo reutilizável. Design system base estilo
+"Nike" (P&B + acentos semânticos fixos), com **cor de marca configurável**
+(`corDestaque`) e **fotografia opcional** — sem nada configurado, o site
+fica preto-e-branco e o bloco de mídia do produto fica um retângulo vazio
+(cor `soft-cloud`, ou `ink` no destaque da home); com `corDestaque` e/ou
+`imagens` preenchidos, o site assume a cor da loja e mostra as fotos reais.
+Sem framework, sem build — HTML puro + CSS + JS, dados em JSON.
 
 ## Estrutura
 - `index.html` — Home (destaque cheio de tela, produtos selecionados,
@@ -32,6 +34,7 @@ Edite `data/config.json`:
   "nome": "Nome da loja",
   "tagline": "frase curta",
   "descricao": "descrição usada em SEO/hero",
+  "sobre": "parágrafo curto contando a história/proposta da loja",
   "whatsapp": "5511999998888",
   "instagram": "https://instagram.com/sualoja",
   "cidade": "Cidade, UF",
@@ -45,13 +48,19 @@ Edite `data/config.json`:
   "colecao": { "numero": "01", "nome": "Temporada 26" }
 }
 ```
-- `corDestaque`: **nesta versão do template essa chave é ignorada.** O
-  sistema de design "Nike" usado aqui é fixo (preto, branco, cinzas e os
-  acentos semânticos `sale`/`success`/`info`) — não existe conceito de
-  "cor de marca" trocável, ao contrário de moldes anteriores deste
-  projeto. A chave continua existindo no JSON só por compatibilidade com
-  o molde multi-cliente; pode deixar `null` ou preenchida, não faz
-  diferença visual.
+- `sobre`: parágrafo curto (2-3 frases) sobre a loja, exibido na seção
+  "Sobre a loja" da Home — logo depois do destaque, antes da grade de
+  produtos. É o espaço reservado pra apresentar a empresa de verdade
+  (história, proposta, o que diferencia), não só o catálogo. Se deixar em
+  branco, o site usa `descricao` no lugar.
+- `corDestaque`: cor de marca da loja, em hex (ex.: `"#FF5A00"`). Sobrescreve
+  `--color-accent` (e calcula automaticamente `--color-on-accent` — texto
+  preto ou branco, o que der mais contraste) em todos os pontos de destaque
+  do site: botão primário, badge da sacola, hero da home, marquee, chip de
+  filtro ativo, cartão de prévia da personalização e tamanho selecionado.
+  Deixe `null` para manter o visual preto-e-branco padrão do template.
+  O resto da paleta (cinzas, `sale`/`success`/`info`) continua fixo — só o
+  acento de marca é trocável.
 - `precoPersonalizacao`: preço fixo do item "Camisa Personalizada" que sai
   do bloco de personalização genérico da Home (`#personalizar`). Esse
   bloco tem feedback **tipográfico** ao vivo (nome/número digitados
@@ -90,11 +99,11 @@ Edite `data/produtos.json`. Cada produto:
 - `tamanhosIndisponiveis` marca tamanhos esgotados (aparecem riscados/desabilitados na PDP).
 - `personalizavel: true` mostra o bloco de nome/número na página do produto.
 - `destaque: true` faz o produto aparecer na Home.
-- `imagens`: **mantenha sempre `[]`.** Esta versão do template não
-  renderiza foto de produto em lugar nenhum (card, sacola, PDP) — o campo
-  existe só por compatibilidade com o molde multi-cliente (outras versões
-  do template usam fotos reais). Preencher esse array aqui não tem
-  efeito: o bloco de mídia é sempre um retângulo vazio.
+- `imagens`: array de caminhos de imagem (ex.: `["img/products/chuteira.jpg"]`).
+  Só a primeira posição (`imagens[0]`) é usada — card, sacola e PDP mostram
+  a mesma foto. Deixe `[]` para o produto ficar sem foto: nesse caso (e se
+  o arquivo referenciado não carregar) o bloco de mídia permanece um
+  retângulo vazio `--color-soft-cloud`, sem quebrar o layout.
 
 ## 3. Categorias
 As categorias são geradas automaticamente a partir do campo `categoria` dos
@@ -108,16 +117,18 @@ configurado em `config.json`. Isso vale tanto para produtos do catálogo
 quanto para a "Camisa Personalizada" genérica adicionada pelo bloco da Home.
 
 ## 5. Design / marca
-O template usa um sistema de design fixo (paleta, tipografia e raios não
-são editáveis via `config.json` nesta versão — só nome/tagline/logo).
-Todas as cores/raios/espaçamentos vêm de `css/tokens.css`; não adicione
-cor fixa em nenhum outro arquivo CSS.
+Paleta, tipografia e raios vêm de `css/tokens.css`; não adicione cor fixa
+em nenhum outro arquivo CSS. Tudo é editável via `config.json`, exceto
+tipografia e raios (esses exigem editar `tokens.css` direto).
 
-- **Paleta**: fixa. Preto (`--color-ink`), branco (`--color-canvas`),
+- **Paleta**: base fixa em preto (`--color-ink`), branco (`--color-canvas`),
   cinza-claro (`--color-soft-cloud`) e os acentos semânticos fixos —
   vermelho de promoção (`--color-sale`), verde de sucesso
-  (`--color-success`), azul de info (`--color-info`). Não há campo de cor
-  de marca nesta versão (ver seção 1, `corDestaque`).
+  (`--color-success`), azul de info (`--color-info`). Por cima dessa base,
+  `--color-accent`/`--color-on-accent` controlam a cor de marca (ver seção
+  1, `corDestaque`) nos pontos de destaque do site — sem `corDestaque`,
+  esses dois tokens valem preto/branco e o site fica idêntico ao visual
+  "Nike" original.
 - **Tipografia**: `Bebas Neue` (títulos grandes/display — carregada via
   Google Fonts, é o substituto usado para a fonte condensada de
   referência) + `Inter` (todo o resto). Se um dia quiserem trocar a fonte
@@ -125,11 +136,10 @@ cor fixa em nenhum outro arquivo CSS.
   Fonts no `<head>` de cada página e a variável `--font-display` em
   `css/tokens.css` — nenhum outro arquivo referencia o nome da fonte
   diretamente.
-- **Sem fotografia**: nenhuma página, componente ou arquivo de dados deste
-  template referencia imagem de produto/categoria/atleta. Onde uma foto
-  apareceria, há um bloco de cor vazio (`--color-soft-cloud` ou
-  `--color-ink`) do tamanho que a foto teria. Isso é proposital, não é um
-  estado "quebrado" — não tente reintroduzir fotos apagando esta nota.
+- **Fotografia**: opcional (ver seção 2, `imagens`). Sem foto cadastrada,
+  o bloco de mídia fica um retângulo vazio `--color-soft-cloud` (ou
+  `--color-ink` no destaque da home) — não é um estado "quebrado", é o
+  visual padrão do template pra quem ainda não tem still de produto.
 
 ## 6. SEO
 Cada página define seu próprio `<link rel="canonical">` — ajuste o domínio
